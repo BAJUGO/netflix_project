@@ -23,7 +23,7 @@ if config.config_file_name is not None:
 from project_dir.core import Base, settings
 target_metadata = Base.metadata
 #! MODELS IMPORTS!
-from project_dir.models import Movie
+from project_dir.models import *
 #! END MODELS IMPORTS
 config.set_main_option("sqlalchemy.url", settings.db_url)
 
