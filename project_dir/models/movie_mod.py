@@ -10,6 +10,6 @@ class Movie(Base):
     title: Mapped[str] = mapped_column()
     year_of_issue: Mapped[int] = mapped_column()
     description: Mapped[str | None] = mapped_column(nullable=True)
-    genre: Mapped[Gener] = mapped_column()
+    genre: Mapped[str | None] = mapped_column(nullable=True)
 
     # author: Mapped[str] = mapped_column()
