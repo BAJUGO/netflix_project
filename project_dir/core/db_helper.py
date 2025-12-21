@@ -6,21 +6,25 @@ from sqlalchemy.ext.asyncio import (
     async_scoped_session,
 )
 
-from ..core import settings
+from project_dir.core import settings
 
 
 class DbHelper:
     def __init__(self, url: str, echo: bool):
         self.engine = create_async_engine(url=url, echo=echo)
 
-        self.session_factory = async_sessionmaker(engine=self.engine,
-                                                  autroflush=False,
-                                                  autocommit=False,
-                                                  expire_on_commit=False)
+        self.session_factory = async_sessionmaker(
+            bind=self.engine,
+            autoflush=False,
+            autocommit=False,
+            expire_on_commit=False,
+        )
 
     def get_scoped_session(self):
-        return async_scoped_session(session_factory=self.session_factory,
-                                    scopefunc=current_task)
+        return async_scoped_session(
+            session_factory=self.session_factory,
+            scopefunc=current_task,
+        )
 
     async def session_dependency(self):
         session = self.get_scoped_session()
