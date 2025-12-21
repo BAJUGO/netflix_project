@@ -15,7 +15,9 @@ dependencies = [
     "alembic (>=1.17.2,<2.0.0)",
     "asyncpg (>=0.31.0,<0.32.0)",
     "fastapi[standard] (>=0.126.0,<0.127.0)",
-    "uvicorn[standard] (>=0.38.0,<0.39.0)"
+    "uvicorn[standard] (>=0.38.0,<0.39.0)",
+    "python-multipart (>=0.0.21,<0.0.22)",
+    "bcrypt (>=5.0.0,<6.0.0)"
 ]
 
 
