@@ -3,7 +3,7 @@ __all__ = (
     "Movie",
     "Series",
     "Author",
-    # "User",
+    "User",
 
 )
 
@@ -11,4 +11,4 @@ from .geners import Gener
 from .movie_mod import Movie
 from .series import Series
 from .author import Author
-# from .user import User
+from .user import User
