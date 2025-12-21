@@ -30,6 +30,9 @@ async def authenticate_user(session: AsyncSession = Depends(db_helper.session_de
         raise HTTPException(status_code=401, detail="password is incorrect")
     return user
 
+
+
+#! ПЕРЕДЕЛАТЬ ЧЕРЕЗ СХЕМЫ!!! (ТАК БЫСТРЕЕ И УДОБНЕЕ)
 # async def do_stuf():
 #     async with db_helper.session_factory() as session:
 #         user = User(

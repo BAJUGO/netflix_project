@@ -5,8 +5,8 @@ from project_dir.authorization import oauth2_schema
 from project_dir.core.db_helper import db_helper
 
 from project_dir.views_part.crud import add_author_session, add_movie_session, get_authors_session, get_movies_session, \
-    delete_author_session
-from project_dir.views_part.schemas import AuthorCreate, AuthorSchema, MovieSchema, MovieCreate
+    delete_author_session, add_user_session
+from project_dir.views_part.schemas import AuthorCreate, AuthorSchema, MovieSchema, MovieCreate, UserCreate
 
 router = APIRouter(dependencies=[Depends(oauth2_schema)], tags=["contents"])
 
@@ -36,3 +36,6 @@ async def get_movies(session: AsyncSession = ses_dep):
 @router.delete("/authors/{author_id}")
 async def delete_author(author_id: int, session: AsyncSession = ses_dep):
     return await delete_author_session(session, author_id)
+
+
+

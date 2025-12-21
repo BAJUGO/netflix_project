@@ -3,13 +3,15 @@ from pydantic import BaseModel
 from sqlalchemy import Select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .schemas import AuthorCreate, MovieCreate
-from ..models import Author, Movie, Series
+from .schemas import AuthorCreate, MovieCreate, UserCreate
+from ..authorization.utilites import hash_password
+from ..models import Author, Movie, Series, User
 
 SCHEMAS_CLS = {
     "AUTHOR": Author,
     "MOVIE": Movie,
-    "SERIES": Series
+    "SERIES": Series,
+    "USER": User
 }
 
 
@@ -49,6 +51,18 @@ async def add_author_session(author_in: AuthorCreate, session: AsyncSession) -> 
 
 async def add_movie_session(movie_in: MovieCreate, session: AsyncSession) -> Movie:
     return await adder_session(movie_in, session, "MOVIE")
+
+
+async def add_user_session(user_in: UserCreate, session: AsyncSession):
+    stmt = Select(User).where(User.visible_name == user_in.visible_name)
+    if await session.scalar(stmt):
+        raise HTTPException(status_code=403, detail="User with such name already exists!")
+    user = User(**user_in.model_dump(exclude={"password"}), hashed_password=hash_password(user_in.password),
+                role="user", active=True)
+    session.add(user)
+    await session.commit()
+    await session.refresh(user)
+    return f"Hello user {user.visible_name}! You have registered, and your ID is {user.id}"
 
 
 async def get_authors_session(session: AsyncSession) -> list[Author]:

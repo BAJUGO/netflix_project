@@ -1,8 +1,12 @@
 from pydantic import BaseModel, Field, ConfigDict
+from sqlalchemy.orm import declared_attr
+
+from project_dir.authorization.utilites import hash_password
 
 
 class BaseReturn(BaseModel):
     model_config = ConfigDict(from_attributes=True)
+    id: int
 
 
 class AuthorCreate(BaseModel):
@@ -11,7 +15,7 @@ class AuthorCreate(BaseModel):
 
 
 class AuthorSchema(BaseReturn, AuthorCreate):
-    id: int
+    pass
 
 
 class MovieCreate(BaseModel):
@@ -23,4 +27,18 @@ class MovieCreate(BaseModel):
 
 
 class MovieSchema(BaseReturn, MovieCreate):
-    id: int
+    pass
+
+
+class UserCreate(BaseModel):
+    visible_name: str
+    username: str
+    password: str
+
+
+
+
+class UserSchema(BaseReturn):
+    visible_name: str
+
+
