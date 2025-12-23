@@ -18,3 +18,5 @@ def get_user_with_role(required_role:str):
             raise HTTPException(status_code=403, detail="Not enough rights")
         return user_token
     return subfunction_required_role
+
+

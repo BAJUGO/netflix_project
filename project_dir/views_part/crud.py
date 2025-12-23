@@ -4,6 +4,8 @@ from sqlalchemy import Select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .schemas import AuthorCreate, MovieCreate, UserCreate
+from ..authorization.auth_deps import get_user_with_role
+from ..authorization.token_schemas import AccessTokenData
 from ..authorization.utilites import hash_password
 from ..models import Author, Movie, Series, User
 
@@ -15,8 +17,8 @@ SCHEMAS_CLS = {
 }
 
 
-async def adder_session(data: BaseModel, session: AsyncSession, schema: str):
-    cls = SCHEMAS_CLS[schema]
+async def adder_session(data: BaseModel, session: AsyncSession, schema_name: str):
+    cls = SCHEMAS_CLS[schema_name]
     obj = cls(**data.model_dump())
     session.add(obj)
     await session.commit()
@@ -31,11 +33,17 @@ async def getter_session(session: AsyncSession, schema_name: str):
     return list(result)
 
 
-async def deleter_session(session: AsyncSession, obj_id: int, schema_name: str, ):
+async def getter_by_id_session(session: AsyncSession, schema_name: str, obj_id: int):
     cls = SCHEMAS_CLS[schema_name]
-    obj_to_del = await session.get(cls, obj_id)
-    if obj_to_del is None:
+    obj = await session.get(cls, obj_id)
+    if obj is None:
         raise HTTPException(status_code=404, detail=f"{schema_name.lower()} wasn't found")
+    return obj
+
+
+
+async def deleter_session(session: AsyncSession, obj_id: int, schema_name: str,):
+    obj_to_del = await getter_by_id_session(session=session, schema_name=schema_name, obj_id=obj_id)
     await session.delete(obj_to_del)
     await session.commit()
     return {f"{schema_name} has been deleter"}
@@ -63,6 +71,10 @@ async def add_user_session(user_in: UserCreate, session: AsyncSession):
     await session.commit()
     await session.refresh(user)
     return f"Hello user {user.visible_name}! You have registered, and your ID is {user.id}"
+
+
+async def delete_user_session(user_to_delete_id: int, session: AsyncSession):
+    return await deleter_session(session=session, obj_id=user_to_delete_id, schema_name="USER")
 
 
 async def get_authors_session(session: AsyncSession) -> list[Author]:

@@ -6,7 +6,7 @@ from project_dir.authorization.token_enc_dec import encode_access_token
 from project_dir.authorization.token_schemas import AccessTokenData
 from project_dir.authorization.utilites import authenticate_user
 from project_dir.core import db_helper
-from project_dir.views_part.crud import add_user_session
+from project_dir.views_part.crud import add_user_session, delete_user_session
 from project_dir.views_part.schemas import UserCreate, UserSchema
 
 router = APIRouter(tags=["token"])
@@ -35,3 +35,8 @@ async def return_admin_token_info(user_token: AccessTokenData = Depends(get_user
 @router.post("/register")
 async def add_new_user(user_in: UserCreate, session: AsyncSession = Depends(db_helper.session_dependency)):
     return await add_user_session(user_in, session)
+
+
+@router.delete("/delete_account")
+async def delete_user(user_id: int, session: AsyncSession = Depends(db_helper.session_dependency), admin=Depends(get_user_with_role("admin"))):
+    return await delete_user_session(user_to_delete_id=user_id, session=session)
