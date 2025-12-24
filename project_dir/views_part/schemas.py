@@ -30,15 +30,24 @@ class MovieSchema(BaseReturn, MovieCreate):
     pass
 
 
+class SeriesCreate(BaseModel):
+    title: str
+    episodes: int
+    seasons: int
+    description: str | None = None
+    genre: str
+    author_id: int
+
+
+class SeriesSchema(BaseReturn, SeriesCreate):
+    pass
+
+
 class UserCreate(BaseModel):
     visible_name: str
     username: str
     password: str
 
 
-
-
 class UserSchema(BaseReturn):
     visible_name: str
-
-

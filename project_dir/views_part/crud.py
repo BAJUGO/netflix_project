@@ -3,7 +3,7 @@ from pydantic import BaseModel
 from sqlalchemy import Select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .schemas import AuthorCreate, MovieCreate, UserCreate
+from .schemas import AuthorCreate, MovieCreate, UserCreate, SeriesCreate
 from project_dir.authorization import get_user_with_role, AccessTokenData, hash_password
 from project_dir.models import Author, Movie, Series, User
 
@@ -31,7 +31,8 @@ async def getter_session(session: AsyncSession, schema_name: str):
     return list(result)
 
 
-async def getter_by_id_session(session: AsyncSession, schema_name: str, obj_id: int) -> type[Author | Movie | User | Series]:
+async def getter_by_id_session(session: AsyncSession, schema_name: str, obj_id: int) -> type[
+    Author | Movie | User | Series]:
     cls = SCHEMAS_CLS[schema_name]
     obj = await session.get(cls, obj_id)
     if obj is None:
@@ -54,6 +55,10 @@ async def add_movie_session(movie_in: MovieCreate, session: AsyncSession) -> Mov
     return await adder_session(movie_in, session, "MOVIE")
 
 
+async def add_series_session(series_in: SeriesCreate, session: AsyncSession) -> Series:
+    return await adder_session(series_in, session, "SERIES")
+
+
 async def add_user_session(user_in: UserCreate, session: AsyncSession):
     stmt = Select(User).where(User.visible_name == user_in.visible_name)
     if await session.scalar(stmt):
@@ -70,8 +75,12 @@ async def delete_user_session(user_to_delete_id: int, session: AsyncSession):
     return await deleter_session(session=session, obj_id=user_to_delete_id, schema_name="USER")
 
 
-async def delete_author_session(session: AsyncSession, obj_id: int):
-    return await deleter_session(session, obj_id, "AUTHOR")
+async def delete_author_session(session: AsyncSession, author_to_delete_id: int):
+    return await deleter_session(session, author_to_delete_id, "AUTHOR")
+
+
+async def delete_series_session(session: AsyncSession, series_to_delete_id: int):
+    return await deleter_session(session, series_to_delete_id, "SERIES")
 
 
 async def get_authors_session(session: AsyncSession) -> list[Author]:

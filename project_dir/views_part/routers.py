@@ -5,8 +5,9 @@ from project_dir.authorization import oauth2_schema
 from project_dir.core import db_helper
 
 from project_dir.views_part.crud import add_author_session, add_movie_session, get_authors_session, get_movies_session, \
-    delete_author_session, add_user_session
-from project_dir.views_part.schemas import AuthorCreate, AuthorSchema, MovieSchema, MovieCreate, UserCreate
+    delete_author_session, add_user_session, add_series_session, get_series_session
+from project_dir.views_part.schemas import AuthorCreate, AuthorSchema, MovieSchema, MovieCreate, UserCreate, \
+    SeriesCreate, SeriesSchema
 
 router = APIRouter(dependencies=[Depends(oauth2_schema)], tags=["contents"])
 
@@ -23,6 +24,11 @@ async def add_movie(movie_in: MovieCreate, session: AsyncSession = ses_dep):
     return await add_movie_session(movie_in, session)
 
 
+@router.post("/series/add_series", response_model=SeriesSchema)
+async def add_series(series_in: SeriesCreate, session: AsyncSession = ses_dep):
+    return await add_series_session(series_in, session)
+
+
 @router.get("/movies/authors/get_authors", response_model=list[AuthorSchema])
 async def get_authors(session: AsyncSession = ses_dep):
     return await get_authors_session(session)
@@ -33,9 +39,11 @@ async def get_movies(session: AsyncSession = ses_dep):
     return await get_movies_session(session)
 
 
+@router.get("/series/get_series", response_model=list[SeriesSchema])
+async def get_series(session: AsyncSession = ses_dep):
+    return await get_series_session(session)
+
+
 @router.delete("/authors/{author_id}")
 async def delete_author(author_id: int, session: AsyncSession = ses_dep):
     return await delete_author_session(session, author_id)
-
-
-
