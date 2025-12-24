@@ -12,7 +12,7 @@ def log_info(data):
 @asynccontextmanager
 async def lifespan_loging(app: FastAPI):
     now = datetime.now(UTC).strftime("%Y-%m-%d %H:%M:%S")
-    log_info(f'''{"*" * 30}
+    log_info(f''' \n\n{"*" * 30}
 app word started now - {now}
 \n\n\n\n''')
     yield

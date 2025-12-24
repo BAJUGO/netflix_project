@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Form
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from project_dir.authorization.auth_deps import get_current_user_access_token, get_user_with_role
@@ -6,7 +6,7 @@ from project_dir.authorization.token_enc_dec import encode_access_token
 from project_dir.authorization.token_schemas import AccessTokenData
 from project_dir.authorization.utilites import authenticate_user
 from project_dir.core import db_helper
-from project_dir.views_part.crud import add_user_session, delete_user_session
+from project_dir.views_part.crud import add_user_session, delete_user_session, change_role_session
 from project_dir.views_part.schemas import UserCreate, UserSchema
 
 router = APIRouter(tags=["token"])
@@ -40,3 +40,8 @@ async def add_new_user(user_in: UserCreate, session: AsyncSession = Depends(db_h
 @router.delete("/delete_account")
 async def delete_user(user_id: int, session: AsyncSession = Depends(db_helper.session_dependency), admin=Depends(get_user_with_role("admin"))):
     return await delete_user_session(user_to_delete_id=user_id, session=session)
+
+
+@router.patch("/role_setter/{user_id}")
+async def change_user_role(user_id: int, role_to_change: str = Form(...), session: AsyncSession = Depends(db_helper.session_dependency), admin=Depends(get_user_with_role("admin"))):
+    return await change_role_session(session, user_id, role_to_change)

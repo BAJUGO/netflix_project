@@ -1,8 +1,8 @@
 from sqlalchemy.orm import Mapped, mapped_column
 
 from .mixins import AuthorRelationMixin
-from ..core import Base
-from ..models import Gener
+from project_dir.core import Base
+from project_dir.models import Gener
 
 
 class Series(AuthorRelationMixin, Base):

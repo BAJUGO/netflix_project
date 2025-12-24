@@ -4,10 +4,8 @@ from sqlalchemy import Select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .schemas import AuthorCreate, MovieCreate, UserCreate
-from ..authorization.auth_deps import get_user_with_role
-from ..authorization.token_schemas import AccessTokenData
-from ..authorization.utilites import hash_password
-from ..models import Author, Movie, Series, User
+from project_dir.authorization import get_user_with_role, AccessTokenData, hash_password
+from project_dir.models import Author, Movie, Series, User
 
 SCHEMAS_CLS = {
     "AUTHOR": Author,
@@ -33,7 +31,7 @@ async def getter_session(session: AsyncSession, schema_name: str):
     return list(result)
 
 
-async def getter_by_id_session(session: AsyncSession, schema_name: str, obj_id: int):
+async def getter_by_id_session(session: AsyncSession, schema_name: str, obj_id: int) -> type[Author | Movie | User | Series]:
     cls = SCHEMAS_CLS[schema_name]
     obj = await session.get(cls, obj_id)
     if obj is None:
@@ -41,16 +39,11 @@ async def getter_by_id_session(session: AsyncSession, schema_name: str, obj_id: 
     return obj
 
 
-
-async def deleter_session(session: AsyncSession, obj_id: int, schema_name: str,):
+async def deleter_session(session: AsyncSession, obj_id: int, schema_name: str, ):
     obj_to_del = await getter_by_id_session(session=session, schema_name=schema_name, obj_id=obj_id)
     await session.delete(obj_to_del)
     await session.commit()
     return {f"{schema_name} has been deleter"}
-
-
-async def delete_author_session(session: AsyncSession, obj_id: int):
-    return await deleter_session(session, obj_id, "AUTHOR")
 
 
 async def add_author_session(author_in: AuthorCreate, session: AsyncSession) -> Author:
@@ -77,6 +70,10 @@ async def delete_user_session(user_to_delete_id: int, session: AsyncSession):
     return await deleter_session(session=session, obj_id=user_to_delete_id, schema_name="USER")
 
 
+async def delete_author_session(session: AsyncSession, obj_id: int):
+    return await deleter_session(session, obj_id, "AUTHOR")
+
+
 async def get_authors_session(session: AsyncSession) -> list[Author]:
     return await getter_session(session, "AUTHOR")
 
@@ -87,3 +84,11 @@ async def get_movies_session(session: AsyncSession) -> list[Movie]:
 
 async def get_series_session(session: AsyncSession) -> list[Series]:
     return await getter_session(session, "SERIES")
+
+
+async def change_role_session(session: AsyncSession, user_id: int, new_role: str):
+    user = await getter_by_id_session(session, "USER", user_id)
+    user.role = new_role
+    await session.commit()
+    await session.refresh(user)
+    return f"{user.visible_name} role has been changed to {user.role}"

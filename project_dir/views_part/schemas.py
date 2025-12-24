@@ -1,7 +1,7 @@
 from pydantic import BaseModel, Field, ConfigDict
 from sqlalchemy.orm import declared_attr
 
-from project_dir.authorization.utilites import hash_password
+from project_dir.authorization import hash_password
 
 
 class BaseReturn(BaseModel):

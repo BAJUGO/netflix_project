@@ -2,10 +2,10 @@ from typing import TYPE_CHECKING
 
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
-from ..core import Base
+from project_dir.core import Base
 
 if TYPE_CHECKING:
-    from ..models import Movie, Series
+    from project_dir.models import Movie, Series
 
 
 class Author(Base):

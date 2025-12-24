@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from project_dir.authorization import oauth2_schema
-from project_dir.core.db_helper import db_helper
+from project_dir.core import db_helper
 
 from project_dir.views_part.crud import add_author_session, add_movie_session, get_authors_session, get_movies_session, \
     delete_author_session, add_user_session
