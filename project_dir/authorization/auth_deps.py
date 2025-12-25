@@ -12,7 +12,8 @@ def get_current_user_access_token(token: str = Depends(oauth2_schema)) -> Access
 
 
 def get_user_with_role(required_role: list[str]):
-    def subfunction_required_role(user_token: AccessTokenData = Depends(get_current_user_access_token)) -> AccessTokenData:
+    def subfunction_required_role(
+            user_token: AccessTokenData = Depends(get_current_user_access_token)) -> AccessTokenData:
         if user_token.role not in required_role:
             raise HTTPException(status_code=403, detail="Not enough rights")
         return user_token

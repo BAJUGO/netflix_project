@@ -1,4 +1,6 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from sqlalchemy.exc import IntegrityError
+from starlette.responses import JSONResponse
 
 from project_dir.loging.mdlwr import do_middleware
 from project_dir.loging.pre_post_up import lifespan_loging
@@ -11,4 +13,6 @@ app.include_router(authorization_router)
 app.middleware("http")(do_middleware)
 
 
-#! НЕ ЗАБУДЬ ПЕРЕНЕСТИ MAIN В PROJECT DIR. ЗАПУСК ДЕЛАТЬ ЧЕРЕЗ UVICORN.RUN
+
+
+#! НЕ ЗАБУДЬ ПЕРЕНЕСТИ MAIN В PROJECT DIR. ЗАПУСК ДЕЛАТЬ ЧЕРЕЗ UVICORN.rUN
