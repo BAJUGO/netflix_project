@@ -6,6 +6,11 @@ class BaseReturn(BaseModel):
     id: int
 
 
+class AuthorPatch(BaseModel):
+    name: str | None = None
+    age: int | None = None
+
+
 class AuthorCreate(BaseModel):
     name: str = Field(min_length=3, max_length=30)
     age: int = Field(ge=6, le=130)
@@ -16,18 +21,30 @@ class AuthorSchema(BaseReturn, AuthorCreate):
 
 
 class MoviePatch(BaseModel):
+    title: str | None
+    year_of_issue: int | None
+    description: str | None = None
+    genre: str | None
+
+
+class MovieCreate(BaseModel):
     title: str
     year_of_issue: int
     description: str | None = None
     genre: str
-
-
-class MovieCreate(MoviePatch):
     author_id: int
 
 
 class MovieSchema(BaseReturn, MovieCreate):
     pass
+
+
+class SeriesPatch(BaseModel):
+    title: str | None = None
+    episodes: int | None = None
+    seasons: int | None = None
+    description: str | None = None
+    genre: str | None = None
 
 
 class SeriesCreate(BaseModel):

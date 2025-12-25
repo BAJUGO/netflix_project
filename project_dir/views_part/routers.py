@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from project_dir.authorization import get_current_user_access_token, admin_dep, admin_or_mod_dep
+from project_dir.authorization import get_current_user_access_token, admin_or_mod_dep
 from project_dir.core import ses_dep
 
 from project_dir.views_part.crud import (
@@ -13,7 +13,9 @@ from project_dir.views_part.crud import (
     add_series_session,
     get_series_session,
     delete_movie_session,
-    full_updater_session
+    delete_series_session, get_users_session, full_update_author_session,
+    full_update_movie_session, full_update_series_session, patch_movie_session, patch_author_session,
+    patch_series_session
 )
 from project_dir.views_part.schemas import (
     AuthorCreate,
@@ -21,24 +23,24 @@ from project_dir.views_part.schemas import (
     MovieSchema,
     MovieCreate,
     SeriesCreate,
-    SeriesSchema, MoviePatch
+    SeriesSchema, MoviePatch, SeriesPatch, AuthorPatch
 )
 
 router = APIRouter(dependencies=[Depends(get_current_user_access_token)], tags=["contents"])
 
 
-@router.post("/authors/add_author", response_model=AuthorSchema)
-async def add_author(author_in: AuthorCreate, session: AsyncSession = ses_dep, adm_or_mod=admin_or_mod_dep):
+@router.post("/authors/add_author", response_model=AuthorSchema, dependencies=[admin_or_mod_dep])
+async def add_author(author_in: AuthorCreate, session: AsyncSession = ses_dep):
     return await add_author_session(author_in, session)
 
 
-@router.post("/movies/add_movie", response_model=MovieSchema)
-async def add_movie(movie_in: MovieCreate, session: AsyncSession = ses_dep, adm_or_mod=admin_or_mod_dep):
+@router.post("/movies/add_movie", response_model=MovieSchema, dependencies=[admin_or_mod_dep])
+async def add_movie(movie_in: MovieCreate, session: AsyncSession = ses_dep):
     return await add_movie_session(movie_in, session)
 
 
-@router.post("/series/add_series", response_model=SeriesSchema)
-async def add_series(series_in: SeriesCreate, session: AsyncSession = ses_dep, adm_or_mod=admin_or_mod_dep):
+@router.post("/series/add_series", response_model=SeriesSchema,dependencies=[admin_or_mod_dep])
+async def add_series(series_in: SeriesCreate, session: AsyncSession = ses_dep):
     return await add_series_session(series_in, session)
 
 
@@ -57,25 +59,51 @@ async def get_series(session: AsyncSession = ses_dep):
     return await get_series_session(session)
 
 
-@router.delete("/authors/{author_id}")
-async def delete_author(author_id: int, session: AsyncSession = ses_dep, adm_or_mod=admin_or_mod_dep):
+@router.get("/users/get_users", response_model=list[str])
+async def get_users(session: AsyncSession = ses_dep):
+    return await get_users_session(session)
+
+
+@router.delete("/authors/{author_id}", dependencies=[admin_or_mod_dep])
+async def delete_author(author_id: int, session: AsyncSession = ses_dep):
     return await delete_author_session(session, author_id)
 
 
-@router.delete("/movie/{movie_id}")
-async def delete_movie(movie_id: int, session: AsyncSession = ses_dep, adm_or_mod=admin_or_mod_dep):
+@router.delete("/series/{series_id}", dependencies=[admin_or_mod_dep])
+async def delete_series(series_id: int, session: AsyncSession = ses_dep):
+    return await delete_series_session(session, series_id)
+
+
+@router.delete("/movie/{movie_id}", dependencies=[admin_or_mod_dep])
+async def delete_movie(movie_id: int, session: AsyncSession = ses_dep):
     return await delete_movie_session(session, movie_id)
 
 
-@router.delete("/series/{series_id}")
-async def delete_series(series_id: int, session: AsyncSession = ses_dep, adm_or_mod=admin_or_mod_dep):
-    return await delete_movie_session(session, series_id)
+@router.put("/author/{author_id}", dependencies=[admin_or_mod_dep])
+async def update_author(author_id: int, author_schema: AuthorCreate, session: AsyncSession = ses_dep):
+    return await full_update_author_session(session, author_id, author_schema)
 
 
-@router.put("/author/{author_id}")
-async def full_update_author(author_id: int, new_author: AuthorCreate, session: AsyncSession = ses_dep, adm_or_mod=admin_or_mod_dep):
-    return await full_updater_session(session, author_id, "AUTHOR", new_author)
+@router.put("/movie/{movie_id}", dependencies=[admin_or_mod_dep])
+async def full_update_movie(movie_id: int, movie_schema: MovieCreate, session: AsyncSession = ses_dep):
+    return await full_update_movie_session(session, movie_id, movie_schema)
 
-@router.put("/movie/{movie_id}")
-async def full_update_movie(movie_id: int, new_movie: MoviePatch, session: AsyncSession = ses_dep, adm_or_mod=admin_or_mod_dep):
-    return await full_updater_session(session, movie_id, "MOVIE", new_movie)
+
+@router.put("/series/{series_id}", dependencies=[admin_or_mod_dep])
+async def full_update_series(series_id: int, series_schema: SeriesCreate, session: AsyncSession = ses_dep):
+    return await full_update_series_session(session, series_id, series_schema)
+
+
+@router.patch("/author/{author_id}", response_model=AuthorSchema, dependencies=[admin_or_mod_dep])
+async def update_author(author_id: int, author_schema: AuthorPatch, session: AsyncSession = ses_dep):
+    return await patch_author_session(session, author_id, author_schema)
+
+
+@router.patch("/movie/{movie_id}", response_model=MovieSchema, dependencies=[admin_or_mod_dep])
+async def update_movie(movie_id: int, movie_schema: MoviePatch, session: AsyncSession = ses_dep):
+    return await patch_movie_session(session, movie_id, movie_schema)
+
+
+@router.patch("/series/{series_id}", response_model=SeriesSchema, dependencies=[admin_or_mod_dep])
+async def update_series(series_id: int, series_schema: SeriesPatch, session: AsyncSession = ses_dep):
+    return await patch_series_session(session, series_id, series_schema)
