@@ -4,7 +4,7 @@ from sqlalchemy import Select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from .schemas import AuthorCreate, MovieCreate, UserCreate, SeriesCreate
-from project_dir.authorization import get_user_with_role, AccessTokenData, hash_password
+from project_dir.authorization import hash_password
 from project_dir.models import Author, Movie, Series, User
 
 SCHEMAS_CLS = {
@@ -24,7 +24,7 @@ async def adder_session(data: BaseModel, session: AsyncSession, schema_name: str
     return obj
 
 
-async def getter_session(session: AsyncSession, schema_name: str):
+async def getter_session(session: AsyncSession, schema_name: str) -> list[Movie | Series | Author | User]:
     cls = SCHEMAS_CLS[schema_name]
     stmt = Select(cls).order_by(cls.id)
     result = await session.scalars(stmt)
@@ -40,11 +40,11 @@ async def getter_by_id_session(session: AsyncSession, schema_name: str, obj_id: 
     return obj
 
 
-async def deleter_session(session: AsyncSession, obj_id: int, schema_name: str, ):
+async def deleter_session(session: AsyncSession, obj_id: int, schema_name: str) -> str:
     obj_to_del = await getter_by_id_session(session=session, schema_name=schema_name, obj_id=obj_id)
     await session.delete(obj_to_del)
     await session.commit()
-    return {f"{schema_name} has been deleter"}
+    return f"{schema_name} has been deleter"
 
 
 async def add_author_session(author_in: AuthorCreate, session: AsyncSession) -> Author:
@@ -59,7 +59,7 @@ async def add_series_session(series_in: SeriesCreate, session: AsyncSession) -> 
     return await adder_session(series_in, session, "SERIES")
 
 
-async def add_user_session(user_in: UserCreate, session: AsyncSession):
+async def add_user_session(user_in: UserCreate, session: AsyncSession) -> str:
     stmt = Select(User).where(User.visible_name == user_in.visible_name)
     if await session.scalar(stmt):
         raise HTTPException(status_code=403, detail="User with such name already exists!")
