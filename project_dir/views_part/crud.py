@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from .schemas import AuthorCreate, MovieCreate, UserCreate, SeriesCreate
 from project_dir.authorization import hash_password
 from project_dir.models import Author, Movie, Series, User
+from ..core import Base
 
 SCHEMAS_CLS = {
     "AUTHOR": Author,
@@ -15,7 +16,7 @@ SCHEMAS_CLS = {
 }
 
 
-async def adder_session(data: BaseModel, session: AsyncSession, schema_name: str):
+async def adder_session(data: BaseModel, session: AsyncSession, schema_name: str) -> Base:
     cls = SCHEMAS_CLS[schema_name]
     obj = cls(**data.model_dump())
     session.add(obj)
@@ -45,6 +46,24 @@ async def deleter_session(session: AsyncSession, obj_id: int, schema_name: str) 
     await session.delete(obj_to_del)
     await session.commit()
     return f"{schema_name} has been deleter"
+
+
+async def patch_updater_session(session: AsyncSession, obj_id: int, schema_name: str, schema_create):
+    obj_to_patch = await getter_by_id_session(session=session, schema_name=schema_name, obj_id=obj_id)
+    for name, value in schema_create.model_dump(exclude_unset=True).items():
+        setattr(obj_to_patch, name, value)
+    await session.commit()
+    await session.refresh(obj_to_patch)
+    return f"{schema_name} has been modified"
+
+
+async def full_updater_session(session: AsyncSession, obj_id: int, schema_name: str, schema_patch):
+    obj_to_update = await getter_by_id_session(session=session, schema_name=schema_name, obj_id=obj_id)
+    for name, value in schema_patch.model_dump(exclude_unset=False).items():
+        setattr(obj_to_update, name, value)
+    await session.commit()
+    await session.refresh(obj_to_update)
+    return f"{schema_name} has been changed"
 
 
 async def add_author_session(author_in: AuthorCreate, session: AsyncSession) -> Author:
@@ -78,6 +97,10 @@ async def delete_author_session(session: AsyncSession, author_to_delete_id: int)
 
 async def delete_series_session(session: AsyncSession, series_to_delete_id: int):
     return await deleter_session(session, series_to_delete_id, "SERIES")
+
+
+async def delete_movie_session(session: AsyncSession, movie_to_delete_id: int):
+    return await deleter_session(session, movie_to_delete_id, "MOVIE")
 
 
 async def get_authors_session(session: AsyncSession) -> list[Author]:

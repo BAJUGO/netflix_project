@@ -15,11 +15,14 @@ class AuthorSchema(BaseReturn, AuthorCreate):
     pass
 
 
-class MovieCreate(BaseModel):
+class MoviePatch(BaseModel):
     title: str
     year_of_issue: int
     description: str | None = None
     genre: str
+
+
+class MovieCreate(MoviePatch):
     author_id: int
 
 
@@ -46,6 +49,6 @@ class UserCreate(BaseModel):
     email: EmailStr
 
 
-#! эта схема бесполезна, пока не будет функции, возвращающая весь список пользователей
+# ! эта схема бесполезна, пока не будет функции, возвращающая весь список пользователей
 class UserSchema(BaseReturn):
     visible_name: str

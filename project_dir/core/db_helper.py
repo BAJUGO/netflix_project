@@ -1,5 +1,6 @@
 from asyncio import current_task
 
+from fastapi import Depends
 from sqlalchemy.ext.asyncio import (
     create_async_engine,
     async_sessionmaker,
@@ -33,3 +34,4 @@ class DbHelper:
 
 
 db_helper = DbHelper(url=settings.db_url, echo=settings.echo)
+ses_dep = Depends(db_helper.session_dependency)
