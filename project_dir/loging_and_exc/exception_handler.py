@@ -1,10 +1,9 @@
-from fastapi import FastAPI, Request
+from fastapi import FastAPI, Request, HTTPException
 from sqlalchemy.exc import IntegrityError
 from fastapi.responses import JSONResponse
 from .pre_post_up import log_info
 from datetime import datetime, UTC
-
-
+from fastapi.exception_handlers import http_exception_handler
 
 
 def custom_exception_handler(app: FastAPI):
@@ -14,8 +13,16 @@ def custom_exception_handler(app: FastAPI):
         detail = "None"
         if "users_visible_name_key" in msg:
             detail = "Such username has been already taken! Try other one!"
-            log_info(f"Such_visible_name_exist_error\nclient - {request.client}\n{datetime.now(UTC)}\n\n", "exceptions_log.txt")
+            log_info(f"Such_visible_name_exist_error\nclient - {request.client}\n{datetime.now(UTC)}\n\n",
+                     "exceptions_log.txt")
         elif "users_email_key" in msg:
             detail = "Such email was already registered! Either login or write other email"
-            log_info(f"Such_email_already_exist_error\nclient - {request.client}\n{datetime.now(UTC)}\n\n", "exceptions_log.txt")
+            log_info(f"Such_email_already_exist_error\nclient - {request.client}\n{datetime.now(UTC)}\n\n",
+                     "exceptions_log.txt")
         return JSONResponse(status_code=401, content={"detail": detail})
+
+    @app.exception_handler(HTTPException)
+    async def work_with_http_exception(request: Request, exc: HTTPException):
+        log_info(f"http_exception_error: st_code - {exc.status_code}\nexc_details - {exc.detail}\n\n",
+                 "exceptions_log.txt")
+        return await http_exception_handler(request, exc)
