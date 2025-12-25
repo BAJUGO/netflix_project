@@ -1,11 +1,7 @@
 from datetime import datetime, UTC
 
-from fastapi import FastAPI, middleware, Request, BackgroundTasks
-
-
-def log_info(data_to_write):
-    with open("D:\project_db_auth\project_dir\loging\lof_file.txt", "a") as file:
-        file.write(data_to_write)
+from fastapi import Request, BackgroundTasks
+from .pre_post_up import log_info
 
 
 
@@ -21,11 +17,11 @@ async def do_middleware(request: Request, call_next):
 \n'''
     response = await call_next(request)
 
-    response.headers["cool_header"] = "cool_header"
+    response.headers["header_setted"] = "in_middleware"
     if response.background:
-        response.background.tasks.append(log_info, data_to_write)
+        response.background.tasks.append(log_info, data_to_write, "log_file.txt")
     else:
         bgt = BackgroundTasks()
-        bgt.add_task(log_info, data_to_write)
+        bgt.add_task(log_info, data_to_write, "log_file.txt")
         response.background = bgt
     return response

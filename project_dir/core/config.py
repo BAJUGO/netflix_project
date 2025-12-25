@@ -14,7 +14,7 @@ class JwtSettings(BaseModel):
 
 class Settings(BaseSettings):
     db_url: str = "postgresql+asyncpg://dima:kiril12AZ@localhost:5432/netflix"
-    echo: bool = True
+    echo: bool = False
     jwt: JwtSettings = JwtSettings()
 
 

@@ -60,9 +60,6 @@ async def add_series_session(series_in: SeriesCreate, session: AsyncSession) -> 
 
 
 async def add_user_session(user_in: UserCreate, session: AsyncSession) -> str:
-    # stmt = Select(User).where(User.visible_name == user_in.visible_name)
-    # if await session.scalar(stmt):
-    #     raise HTTPException(status_code=403, detail="User with such name already exists!")
     user = User(**user_in.model_dump(exclude={"password"}), hashed_password=hash_password(user_in.password),
                 role="user", active=True)
     session.add(user)
