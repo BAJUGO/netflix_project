@@ -17,7 +17,7 @@ router = APIRouter()
 
 @router.post("/create_token", tags=["token"])
 async def check_function(user=Depends(authenticate_user)):
-    data_for_token = {"sub": user.id, "name": user.visible_name, "role": user.role, "id": user.id}
+    data_for_token = {"sub": str(user.id), "name": user.visible_name, "role": user.role, "id": user.id}
     access_token = encode_access_token(data=data_for_token)
     refresh_token = encode_refresh_token(data=data_for_token)
     return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer"}

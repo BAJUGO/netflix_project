@@ -17,6 +17,7 @@ from project_dir.views_part.crud import (
     full_update_movie_session, full_update_series_session, patch_movie_session, patch_author_session,
     patch_series_session
 )
+from project_dir.views_part.relationship_crud import get_author_series_session
 from project_dir.views_part.schemas import (
     AuthorCreate,
     AuthorSchema,
@@ -108,3 +109,8 @@ async def update_movie(movie_id: int, movie_schema: MoviePatch, session: AsyncSe
 @router.patch("/series/{series_id}", response_model=SeriesSchema, dependencies=[admin_or_mod_dep], tags=["series", "update"])
 async def update_series(series_id: int, series_schema: SeriesPatch, session: AsyncSession = ses_dep):
     return await patch_series_session(session, series_id, series_schema)
+
+
+@router.get("/author/series")
+async def author_series(session: AsyncSession = ses_dep):
+    return await get_author_series_session(session)

@@ -5,6 +5,11 @@ from .pre_post_up import log_info
 from datetime import datetime, UTC
 from fastapi.exception_handlers import http_exception_handler
 
+#TODO Сделать эту функцию
+def exception_request_worker(request: Request):
+    pass
+
+
 
 def custom_exception_handler(app: FastAPI):
     @app.exception_handler(IntegrityError)
