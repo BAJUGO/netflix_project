@@ -2,7 +2,7 @@ from pydantic import BaseModel
 
 
 class AccessTokenData(BaseModel):
-    sub: int
+    sub: str
     name: str
     role: str
     id: int

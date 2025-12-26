@@ -9,10 +9,10 @@ async def do_middleware(request: Request, call_next):
     ip = str(request.client.host)
     path = str(request.base_url)
     method = str(request.method)
-    data_to_write = f'''*********
-    path - {path}, method - {method}
-    time - {now}, ip - {ip}
-********
+    data_to_write = f'''\n***
+time: {now}, ip: {ip}
+path + method: {path} - {method}
+***
 \n'''
     response = await call_next(request)
 

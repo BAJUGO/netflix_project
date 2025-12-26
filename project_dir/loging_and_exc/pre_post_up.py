@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
 from datetime import datetime, UTC
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 
 
 
@@ -11,12 +11,11 @@ def log_info(data, where_to_load: str):
 
 @asynccontextmanager
 async def lifespan_loging(app: FastAPI):
-    now = datetime.now(UTC).strftime("%Y-%m-%d %H:%M:%S")
-    log_info(f''' \n\n{"*" * 30}
-app word started now - {now}
-\n\n\n\n''', "log_file.txt")
+    log_info(
+        data="\n$$$$$  application has been started\n", where_to_load="log_file.txt"
+    )
     yield
-    log_info(f'''app work ended now - {now}
-{"*" * 30}\n\n\n\n''', "log_file.txt")
-
+    log_info(
+        data="\n$$$$$  application has been stopped\n", where_to_load="log_file.txt"
+    )
 
