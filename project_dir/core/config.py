@@ -9,7 +9,8 @@ class JwtSettings(BaseModel):
     private_key: Path = Path(__file__).parent.parent / "certs" / "file-jwt-private.pem"
     public_key: Path = Path(__file__).parent.parent / "certs" / "file-jwt-public.pem"
     algorithm: str = "RS256"
-    expire_time_minutes: timedelta = timedelta(minutes=15)
+    expire_time_access: timedelta = timedelta(minutes=15)
+    expire_time_refresh: timedelta = timedelta(days=7)
 
 
 class Settings(BaseSettings):
