@@ -10,7 +10,7 @@ def encode(data: dict, exp: timedelta, token_type: str):
     to_encode["type"] = token_type
     now = datetime.now(UTC)
     to_encode.update(exp=(now + exp), iat=now)
-    token = jwt.encode(payload=to_encode, key=settings.jwt.private_key.read_text(), algorithm=settings.jwt.algorithm)
+    token = jwt.encode(payload=to_encode, key=settings.jwt.private_key, algorithm=settings.jwt.algorithm)
     return token
 
 
@@ -23,4 +23,4 @@ def encode_refresh_token(data: dict, exp: timedelta = settings.jwt.expire_time_r
 
 
 def decode_access_token(token: str):
-    return jwt.decode(token, key=settings.jwt.public_key.read_text(), algorithms=[settings.jwt.algorithm])
+    return jwt.decode(token, key=settings.jwt.public_key, algorithms=[settings.jwt.algorithm])

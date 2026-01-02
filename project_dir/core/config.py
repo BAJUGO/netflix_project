@@ -10,8 +10,8 @@ load_dotenv()
 
 
 class JwtSettings(BaseModel):
-    private_key: Path = Path(__file__).parent.parent / "certs" / "file-jwt-private.pem"
-    public_key: Path = Path(__file__).parent.parent / "certs" / "file-jwt-public.pem"
+    private_key: Path = os.getenv('PRIVATE_KEY')
+    public_key: str = os.getenv('PUBLIC_KEY')
     algorithm: str = "RS256"
     expire_time_access: timedelta = timedelta(minutes=15)
     expire_time_refresh: timedelta = timedelta(days=7)

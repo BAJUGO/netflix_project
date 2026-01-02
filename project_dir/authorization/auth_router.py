@@ -5,7 +5,7 @@ from project_dir.authorization.auth_deps import get_current_user_access_token, a
 from project_dir.authorization.token_enc_dec import encode_access_token, encode_refresh_token
 from project_dir.authorization.token_schemas import AccessTokenData
 from project_dir.authorization.utilites import authenticate_user
-from project_dir.core import db_helper, ses_dep
+from project_dir.core import ses_dep
 from project_dir.views_part.crud import add_user_session, delete_user_session, change_role_session
 from project_dir.views_part.schemas import UserCreate
 
