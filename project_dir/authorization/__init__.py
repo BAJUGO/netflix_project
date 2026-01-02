@@ -5,7 +5,6 @@ __all__ = (
     "AccessTokenData",
     "get_current_user_access_token",
     "hash_password",
-    "authorization_router",
     "admin_dep",
     "admin_or_mod_dep"
 )
@@ -15,4 +14,4 @@ from .token_enc_dec import decode_access_token, encode_access_token
 from .token_schemas import AccessTokenData
 from .auth_deps import get_current_user_access_token, admin_dep, admin_or_mod_dep
 from .utilites import hash_password
-from .auth_router import router as authorization_router
+
