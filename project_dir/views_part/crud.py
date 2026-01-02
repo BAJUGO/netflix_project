@@ -1,13 +1,14 @@
+from typing import TypeVar
+
 from fastapi import HTTPException
 from pydantic import BaseModel
 from sqlalchemy import Select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from .schemas import AuthorCreate, MovieCreate, UserCreate, SeriesCreate, MoviePatch, SeriesPatch, AuthorPatch
 from project_dir.authorization import hash_password
-from project_dir.models import Author, Movie, Series, User
 from project_dir.core import Base
-from typing import TypeVar
+from project_dir.models import Author, Movie, Series, User
+from .schemas import AuthorCreate, MovieCreate, UserCreate, SeriesCreate, MoviePatch, SeriesPatch, AuthorPatch
 
 T = TypeVar('T', bound=Base)
 P = TypeVar('P', bound=BaseModel)
@@ -136,7 +137,7 @@ async def patch_series_session(session: AsyncSession, series_id: int, series_sch
     return await patch_updater_session(session, series_id, Series, series_schema)
 
 
-# ! FUL_UPDATE
+# ! FULL_UPDATE
 async def full_update_author_session(session: AsyncSession, author_id: int, author_schema: AuthorCreate) -> Author:
     return await full_updater_session(session, author_id, Author, author_schema)
 

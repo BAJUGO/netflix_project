@@ -3,7 +3,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from project_dir.authorization import get_current_user_access_token, admin_or_mod_dep
 from project_dir.core import ses_dep
-
 from project_dir.views_part.crud import (
     add_author_session,
     add_movie_session,
@@ -41,7 +40,7 @@ async def add_movie(movie_in: MovieCreate, session: AsyncSession = ses_dep):
     return await add_movie_session(movie_in, session)
 
 
-@router.post("/series/add_series", response_model=SeriesSchema, dependencies=[admin_or_mod_dep], tags=["series", "add"] )
+@router.post("/series/add_series", response_model=SeriesSchema, dependencies=[admin_or_mod_dep], tags=["series", "add"])
 async def add_series(series_in: SeriesCreate, session: AsyncSession = ses_dep):
     return await add_series_session(series_in, session)
 
@@ -76,41 +75,48 @@ async def delete_series(series_id: int, session: AsyncSession = ses_dep):
     return await delete_series_session(session, series_id)
 
 
-@router.delete("/movie/{movie_id}", dependencies=[admin_or_mod_dep], tags=["series", "delete"])
+@router.delete("/movies/{movie_id}", response_model=MovieSchema, dependencies=[admin_or_mod_dep],
+               tags=["series", "delete"])
 async def delete_movie(movie_id: int, session: AsyncSession = ses_dep):
     return await delete_movie_session(session, movie_id)
 
 
-@router.put("/author/{author_id}", dependencies=[admin_or_mod_dep], tags=["author", "update"])
+@router.put("/authors/{author_id}", response_model=AuthorSchema, dependencies=[admin_or_mod_dep],
+            tags=["author", "update"])
 async def update_author(author_id: int, author_schema: AuthorCreate, session: AsyncSession = ses_dep):
     return await full_update_author_session(session, author_id, author_schema)
 
 
-@router.put("/movie/{movie_id}", dependencies=[admin_or_mod_dep], tags=["movie", "update"])
+@router.put("/movies/{movie_id}", response_model=MovieSchema, dependencies=[admin_or_mod_dep],
+            tags=["movie", "update"])
 async def full_update_movie(movie_id: int, movie_schema: MovieCreate, session: AsyncSession = ses_dep):
     return await full_update_movie_session(session, movie_id, movie_schema)
 
 
-@router.put("/series/{series_id}", dependencies=[admin_or_mod_dep], tags=["series", "update"])
+@router.put("/series/{series_id}", response_model=SeriesSchema, dependencies=[admin_or_mod_dep],
+            tags=["series", "update"])
 async def full_update_series(series_id: int, series_schema: SeriesCreate, session: AsyncSession = ses_dep):
     return await full_update_series_session(session, series_id, series_schema)
 
 
-@router.patch("/author/{author_id}", response_model=AuthorSchema, dependencies=[admin_or_mod_dep], tags=["author", "update"])
+@router.patch("/authors/{author_id}", response_model=AuthorSchema, dependencies=[admin_or_mod_dep],
+              tags=["author", "update"])
 async def update_author(author_id: int, author_schema: AuthorPatch, session: AsyncSession = ses_dep):
     return await patch_author_session(session, author_id, author_schema)
 
 
-@router.patch("/movie/{movie_id}", response_model=MovieSchema, dependencies=[admin_or_mod_dep], tags=["movie", "update"])
+@router.patch("/movies/{movie_id}", response_model=MovieSchema, dependencies=[admin_or_mod_dep],
+              tags=["movie", "update"])
 async def update_movie(movie_id: int, movie_schema: MoviePatch, session: AsyncSession = ses_dep):
     return await patch_movie_session(session, movie_id, movie_schema)
 
 
-@router.patch("/series/{series_id}", response_model=SeriesSchema, dependencies=[admin_or_mod_dep], tags=["series", "update"])
+@router.patch("/series/{series_id}", response_model=SeriesSchema, dependencies=[admin_or_mod_dep],
+              tags=["series", "update"])
 async def update_series(series_id: int, series_schema: SeriesPatch, session: AsyncSession = ses_dep):
     return await patch_series_session(session, series_id, series_schema)
 
 
-@router.get("/author/series")
+@router.get("/authors/series")
 async def author_series(session: AsyncSession = ses_dep):
     return await get_author_series_session(session)

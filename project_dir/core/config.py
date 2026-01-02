@@ -1,8 +1,12 @@
+import os
 from datetime import timedelta
 from pathlib import Path
 
+from dotenv import load_dotenv
 from pydantic import BaseModel
 from pydantic_settings import BaseSettings
+
+load_dotenv()
 
 
 class JwtSettings(BaseModel):
@@ -14,7 +18,7 @@ class JwtSettings(BaseModel):
 
 
 class Settings(BaseSettings):
-    db_url: str = "postgresql+asyncpg://dima:kiril12AZ@localhost:5432/netflix"
+    db_url: str = os.getenv('DB_URL')
     echo: bool = False
     jwt: JwtSettings = JwtSettings()
 

@@ -11,9 +11,9 @@ class AuthorRelationMixin:
     _author_back_populates: str | None = None
 
     @declared_attr
-    def author_id(cls) -> Mapped[int]:
+    def author_id(self) -> Mapped[int]:
         return mapped_column(ForeignKey("authors.id"))
 
     @declared_attr
-    def author(cls) -> Mapped["Author"]:
-        return relationship("Author", back_populates=cls._author_back_populates)
+    def author(self) -> Mapped["Author"]:
+        return relationship("Author", back_populates=self._author_back_populates)
