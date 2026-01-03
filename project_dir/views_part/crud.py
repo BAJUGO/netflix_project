@@ -1,4 +1,4 @@
-from typing import TypeVar
+from typing import TypeVar, Any, Coroutine
 
 from fastapi import HTTPException
 from pydantic import BaseModel
@@ -8,7 +8,8 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from project_dir.authorization import hash_password
 from project_dir.core import Base
 from project_dir.models import Author, Movie, Series, User
-from .schemas import AuthorCreate, MovieCreate, UserCreate, SeriesCreate, MoviePatch, SeriesPatch, AuthorPatch
+from .schemas import AuthorCreate, MovieCreate, UserCreate, SeriesCreate, MoviePatch, SeriesPatch, AuthorPatch, \
+    AuthorSchema
 
 T = TypeVar('T', bound=Base)
 P = TypeVar('P', bound=BaseModel)
@@ -96,6 +97,11 @@ async def delete_series_session(session: AsyncSession, series_to_delete_id: int)
 async def delete_movie_session(session: AsyncSession, movie_to_delete_id: int) -> str:
     await deleter_session(session, movie_to_delete_id, Movie)
     return f"Movie with id {movie_to_delete_id} has been deleted"
+
+
+# ! GET_BY_ID
+async def get_author_by_id_session(session: AsyncSession, author_id: int) -> Author:
+    return await getter_by_id_session(session, Author, author_id)
 
 
 # ! GET_LISTS

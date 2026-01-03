@@ -1,7 +1,6 @@
 from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 
-
 from project_dir.loging_and_exc import lifespan_loging, do_middleware, custom_exception_handler
 from project_dir.views_part import routers_router
 

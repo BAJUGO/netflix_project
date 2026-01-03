@@ -1,3 +1,4 @@
+import redis.asyncio
 from fastapi import APIRouter, Depends, Form
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -6,6 +7,8 @@ from project_dir.authorization import get_current_user_access_token, admin_or_mo
 from project_dir.authorization.token_enc_dec import encode_refresh_token
 from project_dir.authorization.utilites import authenticate_user
 from project_dir.core import ses_dep
+from project_dir.models import Author
+from project_dir.views_part.cached_crud import cache_object_with_id
 from project_dir.views_part.crud import (
     add_author_session,
     add_movie_session,
@@ -15,9 +18,17 @@ from project_dir.views_part.crud import (
     add_series_session,
     get_series_session,
     delete_movie_session,
-    delete_series_session, get_users_session, full_update_author_session,
-    full_update_movie_session, full_update_series_session, patch_movie_session, patch_author_session,
-    patch_series_session, add_user_session, delete_user_session, change_role_session
+    delete_series_session,
+    get_users_session,
+    full_update_author_session,
+    full_update_movie_session,
+    full_update_series_session,
+    patch_movie_session,
+    patch_author_session,
+    patch_series_session,
+    add_user_session,
+    delete_user_session,
+    change_role_session
 )
 from project_dir.views_part.relationship_crud import get_author_series_session
 from project_dir.views_part.schemas import (
@@ -28,6 +39,8 @@ from project_dir.views_part.schemas import (
     SeriesCreate,
     SeriesSchema, MoviePatch, SeriesPatch, AuthorPatch, UserCreate
 )
+
+rd = redis.asyncio.Redis(host="localhost", port=6379, db=0)
 
 router = APIRouter(dependencies=[])
 
@@ -61,17 +74,20 @@ async def add_new_user(user_in: UserCreate, session: AsyncSession = ses_dep):
     return await add_user_session(user_in, session)
 
 
-@router.get("/authors/get_authors", response_model=list[AuthorSchema], tags=["author", "get"], dependencies=[Depends(get_current_user_access_token)])
+@router.get("/authors/get_authors", response_model=list[AuthorSchema], tags=["author", "get"],
+            dependencies=[Depends(get_current_user_access_token)])
 async def get_authors(session: AsyncSession = ses_dep):
     return await get_authors_session(session)
 
 
-@router.get("/movies/get_movies", response_model=list[MovieSchema], tags=["movie", "get"], dependencies=[Depends(get_current_user_access_token)])
+@router.get("/movies/get_movies", response_model=list[MovieSchema], tags=["movie", "get"],
+            dependencies=[Depends(get_current_user_access_token)])
 async def get_movies(session: AsyncSession = ses_dep):
     return await get_movies_session(session)
 
 
-@router.get("/series/get_series", response_model=list[SeriesSchema], tags=["series", "get"], dependencies=[Depends(get_current_user_access_token)])
+@router.get("/series/get_series", response_model=list[SeriesSchema], tags=["series", "get"],
+            dependencies=[Depends(get_current_user_access_token)])
 async def get_series(session: AsyncSession = ses_dep):
     return await get_series_session(session)
 
@@ -81,12 +97,17 @@ async def get_users(session: AsyncSession = ses_dep):
     return await get_users_session(session)
 
 
+@router.get("/authors/{author_id}")
+async def get_author(author_id: int, session: AsyncSession = ses_dep):
+    return await cache_object_with_id(rd=rd, session=session, obj_id=author_id, orm_model=Author, ex=30)
+
+
 @router.get("/for_users_only", tags=["token"])
 async def return_user_token_info(user_token: AccessTokenData = Depends(get_current_user_access_token)):
     return f"Hello {user_token.name}! Your role is {user_token.role} Your id is {user_token.id}"
 
 
-@router.get("/authors/series", tags=["author", "get" ], dependencies=[Depends(get_current_user_access_token)])
+@router.get("/authors/series", tags=["author", "get"], dependencies=[Depends(get_current_user_access_token)])
 async def author_series(session: AsyncSession = ses_dep):
     return await get_author_series_session(session)
 

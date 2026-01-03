@@ -19,7 +19,7 @@ class JwtSettings(BaseModel):
 
 class Settings(BaseSettings):
     db_url: str = os.getenv('DB_URL')
-    echo: bool = False
+    echo: bool = True
     jwt: JwtSettings = JwtSettings()
 
 
