@@ -1,4 +1,3 @@
-import redis.asyncio
 from fastapi import APIRouter, Depends, Form
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -7,8 +6,9 @@ from project_dir.authorization import get_current_user_access_token, admin_or_mo
 from project_dir.authorization.token_enc_dec import encode_refresh_token
 from project_dir.authorization.utilites import authenticate_user
 from project_dir.core import ses_dep
-from project_dir.models import Author
-from project_dir.views_part.cached_crud import cache_object_with_id
+from project_dir.loging_and_exc.pre_post_up import get_redis
+from project_dir.views_part.cached_crud import get_author_with_cache
+
 from project_dir.views_part.crud import (
     add_author_session,
     add_movie_session,
@@ -40,7 +40,7 @@ from project_dir.views_part.schemas import (
     SeriesSchema, MoviePatch, SeriesPatch, AuthorPatch, UserCreate
 )
 
-rd = redis.asyncio.Redis(host="localhost", port=6379, db=0)
+
 
 router = APIRouter(dependencies=[])
 
@@ -98,8 +98,8 @@ async def get_users(session: AsyncSession = ses_dep):
 
 
 @router.get("/authors/{author_id}")
-async def get_author(author_id: int, session: AsyncSession = ses_dep):
-    return await cache_object_with_id(rd=rd, session=session, obj_id=author_id, orm_model=Author, ex=30)
+async def get_author(author_id: int, session: AsyncSession = ses_dep, redis=Depends(get_redis)):
+    return await get_author_with_cache(author_id=author_id, redis=redis, session=session)
 
 
 @router.get("/for_users_only", tags=["token"])
