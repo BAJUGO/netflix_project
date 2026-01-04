@@ -1,6 +1,6 @@
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
 from redis.asyncio import Redis
 
 from project_dir.core import settings
@@ -11,7 +11,6 @@ def log_info(data, where_to_load: str):
         file.write(data)
 
 
-redis_client: Redis | None = None
 
 
 @asynccontextmanager
@@ -19,10 +18,10 @@ async def lifespan(app: FastAPI):
     log_info(
         data="\n$$$$$  application has been started\n", where_to_load="log_file.txt"
     )
-    global redis_client
+
     redis_client = Redis(host=settings.redis.host, port=settings.redis.port, db=settings.redis.db,
                          decode_responses=True)
-
+    app.state.redis = redis_client
     yield
     log_info(
         data="\n$$$$$  application has been stopped\n", where_to_load="log_file.txt"
@@ -30,5 +29,5 @@ async def lifespan(app: FastAPI):
     await redis_client.aclose()
 
 
-async def get_redis() -> Redis:
-    return redis_client
+async def get_redis(request: Request) -> Redis:
+    return request.app.state.redis
