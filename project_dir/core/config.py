@@ -20,7 +20,7 @@ class JwtSettings(BaseModel):
     private_key: Path
     public_key: Path
     algorithm: str
-    expire_time_access: timedelta = timedelta(minutes=15)
+    expire_time_access: timedelta = timedelta(minutes=1)
     expire_time_refresh: timedelta = timedelta(days=7)
 
 

@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Request, HTTPException
+from jwt import ExpiredSignatureError
 from sqlalchemy.exc import IntegrityError
 from fastapi.responses import JSONResponse
 from .pre_post_up import log_info
@@ -40,3 +41,15 @@ def custom_exception_handler(app: FastAPI):
             where_to_load="exceptions_log.txt"
         )
         return await http_exception_handler(request, exc)
+
+    @app.exception_handler(ExpiredSignatureError)
+    async def work_with_expire_signature(request: Request, exc: ExpiredSignatureError):
+        now = datetime.now(UTC).strftime("%Y-%m-%d %H:%M:%S")
+        ip = str(request.client.host)
+        path = str(request.base_url)
+        method = str(request.method)
+        log_info(
+            data=f"Expired Signature Error. \nTime: {now} - Ip: {ip}\nPath: {path} + method: {method}\n\n",
+            where_to_load="exceptions_log.txt"
+        )
+        return JSONResponse(status_code=401, content={"detail": 'your token is expired. Relogin'})

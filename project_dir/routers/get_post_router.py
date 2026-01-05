@@ -4,8 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 import project_dir.views_part.crud as crud
 import project_dir.views_part.schemas as schemas
 from project_dir.authorization import admin_or_mod_dep, encode_access_token, get_current_user_access_token, admin_dep, \
-    AccessTokenData
-from project_dir.authorization.token_enc_dec import encode_refresh_token
+    AccessTokenData, encode_refresh_token
 from project_dir.authorization.utilites import authenticate_user
 from project_dir.core import ses_dep
 from project_dir.loging_and_exc.pre_post_up import get_redis
@@ -67,9 +66,9 @@ async def get_users(session: AsyncSession = ses_dep):
     return await crud.get_users_session(session)
 
 
-@router.get("/authors/series", tags=["author", "get"], dependencies=[Depends(get_current_user_access_token)])
-async def author_series(session: AsyncSession = ses_dep):
-    return await crud.get_author_series_session(session)
+@router.get("/authors/series", response_model=dict[str, list], tags=["author", "get"], dependencies=[Depends(get_current_user_access_token)])
+async def author_series(session: AsyncSession = ses_dep, redis=Depends(get_redis)):
+    return await crud.get_authors_series_with_cache(redis=redis, session=session)
 
 
 @router.get("/authors/{author_id}", tags=["author", "get"])

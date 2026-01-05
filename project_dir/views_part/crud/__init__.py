@@ -20,10 +20,12 @@ __all__ = (
     "patch_author_session",
     "patch_series_session",
     "delete_user_session",
-    "change_role_session"
+    "change_role_session",
+    "get_authors_series_with_cache",
+
 )
 
-from .cached_crud import get_author_with_cache
+from .cached_crud import get_author_with_cache, get_authors_series_with_cache
 
 from .crud import (add_author_session, add_movie_session, add_series_session, add_user_session,
                    get_authors_session, get_movies_session, get_series_session, get_users_session,
