@@ -5,7 +5,7 @@ from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from project_dir.models import Author
-from project_dir.views_part.crud import getter_by_id_session
+from project_dir.views_part.crud.crud import getter_by_id_session
 from project_dir.views_part.schemas import AuthorSchema
 
 

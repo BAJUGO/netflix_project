@@ -64,8 +64,3 @@ class UserCreate(BaseModel):
     visible_name: str = Field(min_length=2, max_length=35)
     password: str = Field(min_length=5, max_length=255)
     email: EmailStr
-
-
-# ! эта схема бесполезна, пока не будет функции, возвращающая весь список пользователей
-class UserSchema(BaseReturn):
-    visible_name: str

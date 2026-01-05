@@ -8,7 +8,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from project_dir.authorization import hash_password
 from project_dir.core import Base
 from project_dir.models import Author, Movie, Series, User
-from .schemas import AuthorCreate, MovieCreate, UserCreate, SeriesCreate, MoviePatch, SeriesPatch, AuthorPatch
+from project_dir.views_part.schemas import AuthorCreate, MovieCreate, UserCreate, SeriesCreate, MoviePatch, SeriesPatch, AuthorPatch
 
 T = TypeVar('T', bound=Base)
 P = TypeVar('P', bound=BaseModel)
