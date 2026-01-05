@@ -41,5 +41,5 @@ async def get_author_with_cache(author_id: int, redis: Redis | None, session: As
 
 
 @cache_response_wrapper(ttl=30, namespace="authors", key_arg="series")
-async def get_authors_series_with_cache(redis: Redis | None, session: AsyncSession, series: str = "series"):
+async def get_authors_series_with_cache(redis: Redis | None, session: AsyncSession, series = "series"):
     return await get_author_series_session(session)
