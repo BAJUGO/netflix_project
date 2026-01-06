@@ -1,8 +1,9 @@
 .venv
 .idea
-/project_dir/loging_and_exc/exceptions_log.txt
-/project_dir/loging_and_exc/log_file.txt
+/project_dir/logging_and_exc/exceptions_log.txt
+/project_dir/logging_and_exc/log_file.txt
 /lof_file.txt
 /.env
 /project_dir/certs/
 /certs/
+

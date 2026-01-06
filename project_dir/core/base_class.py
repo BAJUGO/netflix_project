@@ -3,6 +3,7 @@ from sqlalchemy.orm import declarative_base, Mapped, mapped_column
 
 BaseModel_not_pyd = declarative_base()
 
+
 class Base(BaseModel_not_pyd):
     __abstract__ = True
 

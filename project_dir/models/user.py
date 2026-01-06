@@ -11,5 +11,3 @@ class User(Base):
     role: Mapped[str] = mapped_column()
     email: Mapped[str] = mapped_column(unique=True)
     active: Mapped[bool] = mapped_column()
-
-

@@ -24,8 +24,11 @@ def verify_password(plain_pw: str, hashed_pw: bytes):
 # ! Здесь написали,что принимаем username просто чтобы oauth2_schema не жаловалась, ведь она ожидает принятия username и password
 # ! Эта функция - форма дял create_token. Oauth2_schema использует свою форму (username, password), поэтому здесь формы должны быть
 # ! Одинаковыми
-async def authenticate_user(session: AsyncSession = Depends(db_helper.session_dependency), username: str = Form(...),
-                            password: str = Form(...)):
+async def authenticate_user(
+    session: AsyncSession = Depends(db_helper.session_dependency),
+    username: str = Form(...),
+    password: str = Form(...),
+):
     stmt = Select(User).where(User.email == username)
     user = await session.scalar(stmt)
     if user is None:
@@ -33,6 +36,7 @@ async def authenticate_user(session: AsyncSession = Depends(db_helper.session_de
     if not verify_password(password, user.hashed_password):
         raise HTTPException(status_code=401, detail="password is incorrect")
     return user
+
 
 # async def do_stuf():
 #     async with db_helper.session_factory() as session:

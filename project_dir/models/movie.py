@@ -2,7 +2,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 
 from .mixins import AuthorRelationMixin
 from project_dir.core import Base
-from project_dir.models import Gener
+
 
 
 class Movie(AuthorRelationMixin, Base):
@@ -13,4 +13,3 @@ class Movie(AuthorRelationMixin, Base):
     year_of_issue: Mapped[int] = mapped_column()
     description: Mapped[str | None] = mapped_column(nullable=True)
     genre: Mapped[str] = mapped_column()
-

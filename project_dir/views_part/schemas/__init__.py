@@ -8,10 +8,18 @@ __all__ = (
     "SeriesPatch",
     "SeriesCreate",
     "SeriesSchema",
-    "UserCreate"
+    "UserCreate",
 )
 
-from .schemas import (AuthorPatch, AuthorCreate, AuthorSchema,
-                      MoviePatch, MovieCreate, MovieSchema,
-                      SeriesPatch, SeriesCreate, SeriesSchema,
-                      UserCreate)
+from .schemas import (
+    AuthorPatch,
+    AuthorCreate,
+    AuthorSchema,
+    MoviePatch,
+    MovieCreate,
+    MovieSchema,
+    SeriesPatch,
+    SeriesCreate,
+    SeriesSchema,
+    UserCreate,
+)

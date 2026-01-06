@@ -9,11 +9,11 @@ async def do_middleware(request: Request, call_next):
     ip = str(request.client.host)
     path = str(request.base_url)
     method = str(request.method)
-    data_to_write = f'''\n***
+    data_to_write = f"""\n***
 time: {now}, ip: {ip}
 path + method: {path} - {method}
 ***
-\n'''
+\n"""
     response = await call_next(request)
 
     response.headers["header_set"] = "in_middleware"

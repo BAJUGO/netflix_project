@@ -1,15 +1,17 @@
+from datetime import datetime, UTC
+
 from fastapi import FastAPI, Request, HTTPException
+from fastapi.exception_handlers import http_exception_handler
+from fastapi.responses import JSONResponse
 from jwt import ExpiredSignatureError
 from sqlalchemy.exc import IntegrityError
-from fastapi.responses import JSONResponse
-from .pre_post_up import log_info
-from datetime import datetime, UTC
-from fastapi.exception_handlers import http_exception_handler
 
-#TODO Сделать эту функцию
+from .pre_post_up import log_info
+
+
+# TODO Сделать эту функцию
 def exception_request_worker(request: Request):
     pass
-
 
 
 def custom_exception_handler(app: FastAPI):
@@ -23,10 +25,12 @@ def custom_exception_handler(app: FastAPI):
         if "users_visible_name_key" in msg:
             detail = "Such username has been already taken! Try other one!"
         elif "users_email_key" in msg:
-            detail = "Such email was already registered! Either login or write other email"
+            detail = (
+                "Such email was already registered! Either login or write other email"
+            )
         log_info(
             data=f"Integrity exception: {detail}\nTime: {now} - Ip: {ip}\nPath: {path}\n\n",
-            where_to_load="exceptions_log.txt"
+            where_to_load="exceptions_log.txt",
         )
         return JSONResponse(status_code=401, content={"detail": detail})
 
@@ -38,7 +42,7 @@ def custom_exception_handler(app: FastAPI):
         method = str(request.method)
         log_info(
             data=f"HTTPException: {exc.detail}. s_code: {exc.status_code}\nTime: {now} - Ip: {ip}\nPath: {path} + method: {method}\n\n",
-            where_to_load="exceptions_log.txt"
+            where_to_load="exceptions_log.txt",
         )
         return await http_exception_handler(request, exc)
 
@@ -50,6 +54,8 @@ def custom_exception_handler(app: FastAPI):
         method = str(request.method)
         log_info(
             data=f"Expired Signature Error. \nTime: {now} - Ip: {ip}\nPath: {path} + method: {method}\n\n",
-            where_to_load="exceptions_log.txt"
+            where_to_load="exceptions_log.txt",
         )
-        return JSONResponse(status_code=401, content={"detail": 'your token is expired. Relogin'})
+        return JSONResponse(
+            status_code=401, content={"detail": "your token is expired. Relogin"}
+        )
