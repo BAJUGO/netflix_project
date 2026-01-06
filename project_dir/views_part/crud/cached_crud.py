@@ -18,10 +18,11 @@ def cache_response_wrapper(ttl: int, namespace: str, key_arg: str):
 
             if not (cache := kwargs.get('redis')):
                 return await func(*args, **kwargs)
-
-            if cached_value := await cache.get(cache_key):
-                return json.loads(cached_value)
-
+            try:
+                if cached_value := await cache.get(cache_key):
+                    return json.loads(cached_value)
+            except Exception as e:
+                print(f"Couldn't cache this shit! {e}")
             response = await func(*args, **kwargs)
             try:
                 await cache.set(name=cache_key, value=json.dumps(response), ex=ttl)

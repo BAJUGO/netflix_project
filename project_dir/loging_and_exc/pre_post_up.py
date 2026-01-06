@@ -17,7 +17,7 @@ async def lifespan(app: FastAPI):
         data="\n$$$$$  application has been started\n", where_to_load="log_file.txt"
     )
     redis_client = Redis(host=settings.redis.host, port=settings.redis.port, db=settings.redis.db,
-                         decode_responses=True)
+                         username=settings.redis.username, password=settings.redis.password, decode_responses=True)
     app.state.redis = redis_client
 
     try:

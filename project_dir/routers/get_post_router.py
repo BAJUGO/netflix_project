@@ -66,9 +66,10 @@ async def get_users(session: AsyncSession = ses_dep):
     return await crud.get_users_session(session)
 
 
-@router.get("/authors/series", response_model=dict[str, list], tags=["author", "get"], dependencies=[Depends(get_current_user_access_token)])
+@router.get("/authors/series", response_model=dict[str, list], tags=["author", "get"],
+            dependencies=[Depends(get_current_user_access_token)])
 async def author_series(session: AsyncSession = ses_dep, redis=Depends(get_redis)):
-    return await crud.get_authors_series_with_cache(series="series",redis=redis, session=session)
+    return await crud.get_authors_series_with_cache(series="series", redis=redis, session=session)
 
 
 @router.get("/authors/{author_id}", tags=["author", "get"])
