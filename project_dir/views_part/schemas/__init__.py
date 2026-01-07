@@ -9,6 +9,7 @@ __all__ = (
     "SeriesCreate",
     "SeriesSchema",
     "UserCreate",
+    "UserSchema"
 )
 
 from .schemas import (
@@ -22,4 +23,5 @@ from .schemas import (
     SeriesCreate,
     SeriesSchema,
     UserCreate,
+    UserSchema
 )

@@ -1,5 +1,5 @@
 __all__ = (
-    "get_author_with_cache",
+    "get_author_by_id_with_cache",
     "add_author_session",
     "add_movie_session",
     "add_series_session",
@@ -8,7 +8,6 @@ __all__ = (
     "get_movies_session",
     "get_series_session",
     "get_users_session",
-    "get_author_content_session",
     "delete_author_session",
     "delete_author_session",
     "delete_movie_session",
@@ -21,21 +20,30 @@ __all__ = (
     "patch_series_session",
     "delete_user_session",
     "change_role_session",
-    "get_author_series_with_cache",
+    "get_authors_and_their_series_with_cache",
     "get_author_of_movie_with_cache",
     "get_author_of_series_with_cache",
-    "get_movie_with_cache",
-    "get_series_with_cache"
+    "get_movie_by_id_with_cache",
+    "get_series_by_id_with_cache",
+    "get_authors_and_their_movies_with_cache",
+    "get_all_authors_with_cache",
+    "get_all_movies_with_cache",
+    "get_all_series_with_cache",
+    "get_author_of_movie_rel_session",
+    "get_author_of_series_rel_session"
 )
 
 from .cached_crud import (
-    get_author_with_cache,
-    get_author_series_with_cache,
+    get_author_by_id_with_cache,
+    get_authors_and_their_series_with_cache,
     get_author_of_movie_with_cache,
     get_author_of_series_with_cache,
-    get_movie_with_cache,
-    get_series_with_cache
-
+    get_movie_by_id_with_cache,
+    get_series_by_id_with_cache,
+    get_authors_and_their_movies_with_cache,
+    get_all_authors_with_cache,
+    get_all_movies_with_cache,
+    get_all_series_with_cache,
 )
 
 from .crud import (
@@ -60,4 +68,4 @@ from .crud import (
     change_role_session,
 )
 
-from .relationship_crud import get_author_content_session
+from .relationship_crud import get_author_of_movie_rel_session, get_author_of_series_rel_session

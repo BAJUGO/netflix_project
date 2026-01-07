@@ -64,3 +64,8 @@ class UserCreate(BaseModel):
     visible_name: str = Field(min_length=2, max_length=35)
     password: str = Field(min_length=5, max_length=255)
     email: EmailStr
+
+
+class UserSchema(BaseReturn, BaseModel):
+    visible_name: str
+    email: EmailStr

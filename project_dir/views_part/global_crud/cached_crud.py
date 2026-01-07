@@ -5,102 +5,89 @@ from typing import Callable
 from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
-import project_dir.models as models
 import project_dir.views_part.global_crud.crud as default_crud
 import project_dir.views_part.global_crud.relationship_crud as rel_crud
-import project_dir.views_part.schemas as schemas
 
 
-def cache_response_wrapper(
-        ttl: int, namespace: str, key_builder: Callable[[dict], str] | None = None
-):
+def cache_response_wrapper(ttl: int, namespace: str, key_builder: Callable[[dict], str] | None = None):
     def decorator(func):
         @wraps(func)
         async def wrapper(*args, **kwargs):
-            if not (cache := kwargs.get("redis")) or not key_builder:
+            redis: Redis | None = kwargs.get("redis")
+            if not redis or not key_builder:
                 return await func(*args, **kwargs)
-
             cache_key = f"{namespace}:{key_builder(kwargs)}"
-
             try:
-                if cached_value := await cache.get(cache_key):
-                    return json.loads(cached_value)
+                if cached := await redis.get(cache_key):
+                    return json.loads(cached)
             except Exception as e:
-                print(f"Couldn't cache this shit! {e}")
+                print(f"exception with caching! {e}")
             response = await func(*args, **kwargs)
             try:
-                await cache.set(name=cache_key, value=json.dumps(response), ex=ttl)
+                await redis.set(cache_key, json.dumps(response), ex=ttl)
             except Exception as e:
-                print(f"Couldn't cache this shit! {e}")
+                print(f"exception with caching! {e}")
             return response
-
         return wrapper
-
     return decorator
 
 
-# def zatychka(kw):
-#     return str(kw["author_id"])
-#
-# def zatychka2(kw):
-#     return kw["content"]
-#
-# def zatychka3(kw):
-#     return f'{kw["movie_id"]}:{kw["second_key_arg"]}'
+@cache_response_wrapper(20, "author", lambda kw: str(kw["author_id"]))
+async def get_author_by_id_with_cache(session: AsyncSession, redis: Redis | None, author_id: int):
+    return await default_crud.get_author_by_id_session(session, author_id)
 
 
-@cache_response_wrapper(ttl=20, namespace="author", key_builder=lambda kwg_arg: str(kwg_arg["author_id"]))
-async def get_author_with_cache(
-        redis: Redis | None, session: AsyncSession, author_id: int
-):
-    author = await default_crud.getter_by_id_session(session, models.Author, author_id)
-    return schemas.AuthorSchema.model_validate(author).model_dump()
+@cache_response_wrapper(20, "movie", lambda kw: str(kw["movie_id"]))
+async def get_movie_by_id_with_cache(session: AsyncSession, redis: Redis | None, movie_id: int):
+    return await default_crud.get_movie_by_id_session(session, movie_id)
 
 
-@cache_response_wrapper(ttl=20, namespace="movie", key_builder=lambda kwg_arg: str(kwg_arg["movie_id"]))
-async def get_movie_with_cache(
-        redis: Redis | None, session: AsyncSession, movie_id: int
-):
-    movie = await default_crud.getter_by_id_session(session, models.Movie, movie_id)
-    return schemas.MovieSchema.model_validate(movie).model_dump()
+@cache_response_wrapper(20, "series", lambda kw: str(kw["series_id"]))
+async def get_series_by_id_with_cache(session: AsyncSession, redis: Redis | None, series_id: int):
+    return await default_crud.get_series_by_id_session(session, series_id)
 
 
-@cache_response_wrapper(ttl=20, namespace="series", key_builder=lambda kwg_arg: str(kwg_arg["series_id"]))
-async def get_series_with_cache(
-        redis: Redis | None, session: AsyncSession, series_id: int
-):
-    series = await default_crud.getter_by_id_session(session, models.Series, series_id)
-    return schemas.SeriesSchema.model_validate(series).model_dump()
+@cache_response_wrapper(20, "user", lambda kw: str(kw["user_id"]))
+async def get_user_by_id_with_cache(session: AsyncSession, redis: Redis | None, user_id: int):
+    return await default_crud.get_user_by_id_session(session, user_id)
 
 
-@cache_response_wrapper(ttl=30, namespace="authors", key_builder=lambda kwg_arg: kwg_arg["series"])
-async def get_author_series_with_cache(
-        redis: Redis | None, session: AsyncSession, series: str = "series"
-):
-    return await rel_crud.get_author_content_session(session, base_class_attribute=models.Author.series,
-                                                     schema=schemas.SeriesSchema)
+@cache_response_wrapper(30, "authors", lambda kw: kw["second_key_arg"])
+async def get_authors_and_their_series_with_cache(session: AsyncSession, redis: Redis | None, second_key_arg: str = "series"):
+    return await rel_crud.get_series_of_author_rel_session(session)
 
 
-@cache_response_wrapper(ttl=180, namespace="movie",
-                        key_builder=lambda kwg_arg: f'{kwg_arg["movie_id"]}:{kwg_arg["second_key_arg"]}')
-async def get_author_of_movie_with_cache(
-        redis: Redis | None,
-        session: AsyncSession,
-        movie_id: int,
-        second_key_arg: str = "author",
-):
-    return await rel_crud.get_author_of_content(session=session, base_class=models.Movie,
-                                                base_class_author=models.Movie.author,
-                                                content_id=movie_id)
+@cache_response_wrapper(30, "authors", lambda kw: kw["second_key_arg"])
+async def get_authors_and_their_movies_with_cache(session: AsyncSession, redis: Redis | None, second_key_arg: str = "movies"):
+    return await rel_crud.get_movies_of_author_rel_session(session)
 
 
-@cache_response_wrapper(ttl=180, namespace="series",
-                        key_builder=lambda kwg_arg: f'{kwg_arg["series_id"]}:{kwg_arg["second_key_arg"]}')
-async def get_author_of_series_with_cache(
-        redis: Redis | None,
-        session: AsyncSession,
-        series_id: int,
-        second_key_arg: str = "author",
-):
-    return await rel_crud.get_author_of_content(session=session, base_class=models.Series,
-                                                base_class_author=models.Series.author, content_id=series_id)
+@cache_response_wrapper(180, "movie", lambda kw: f'{kw["movie_id"]}:{kw["second_key_arg"]}')
+async def get_author_of_movie_with_cache(session: AsyncSession, redis: Redis | None, movie_id: int, second_key_arg: str = "author"):
+    return await rel_crud.get_author_of_movie_rel_session(session, movie_id)
+
+
+@cache_response_wrapper(180, "series", lambda kw: f'{kw["series_id"]}:{kw["second_key_arg"]}')
+async def get_author_of_series_with_cache(session: AsyncSession, redis: Redis | None, series_id: int, second_key_arg: str = "author"):
+    return await rel_crud.get_author_of_series_rel_session(session, series_id)
+
+
+@cache_response_wrapper(60, "authors", lambda kw: kw["second_key_arg"])
+async def get_all_authors_with_cache(session: AsyncSession, redis: Redis | None, second_key_arg: str = "all"):
+    return await default_crud.get_authors_session(session)
+
+
+@cache_response_wrapper(60, "movies", lambda kw: kw["second_key_arg"])
+async def get_all_movies_with_cache(session: AsyncSession, redis: Redis | None, second_key_arg: str = "all"):
+    return await default_crud.get_movies_session(session)
+
+
+@cache_response_wrapper(60, "series", lambda kw: kw["second_key_arg"])
+async def get_all_series_with_cache(session: AsyncSession, redis: Redis | None, second_key_arg: str = "all"):
+    return await default_crud.get_series_session(session)
+
+
+@cache_response_wrapper(60, "users", lambda kw: kw["second_key_arg"])
+async def get_all_users_with_cache(session: AsyncSession, redis: Redis | None, second_key_arg: str = "all"):
+    return await default_crud.get_series_session(session)
+
