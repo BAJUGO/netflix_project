@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 
 import project_dir.authorization as auth
@@ -16,9 +16,13 @@ router = APIRouter(dependencies=[])
 # ====================
 
 @router.post("/create_token", tags=["token"])
-async def create_token(user=Depends(auth.authenticate_user)):
+async def create_token(response: Response, user=Depends(auth.authenticate_user)):
     data = {"sub": str(user.id), "name": user.visible_name, "role": user.role, "id": user.id}
-    return {"access_token": auth.encode_access_token(data=data), "refresh_token": auth.encode_refresh_token(data=data), "token_type": "bearer"}
+    access_token = auth.encode_access_token(data=data)
+    refresh_token = auth.encode_refresh_token(data=data)
+    response.set_cookie(key="access_token", value=access_token, max_age=60 * 15, httponly=True, samesite="lax", path="/")
+    response.set_cookie(key="refresh_token", value=refresh_token, max_age=60 * 60 * 24 * 7, httponly=True, samesite="lax", path="/")
+    return {"access_token": access_token, "refresh_token": refresh_token, "token_type": "bearer"}
 
 
 @router.get("/for_users_only", tags=["token"])

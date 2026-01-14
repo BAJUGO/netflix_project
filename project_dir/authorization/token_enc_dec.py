@@ -32,3 +32,4 @@ def decode_access_token(token: str):
         key=settings.jwt.public_key.read_text(),
         algorithms=[settings.jwt.algorithm],
     )
+

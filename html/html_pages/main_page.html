@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+    >
+    <title>Title</title>
+</head>
+
+<div class="container my-5">
+    <h1 class="text-center">Welcome on the main page!</h1>
+    <p class="text-center">Seems like you have completed an authentication!</p>
+</div>
+
+<div class="container py-5">
+    <div class="row g-3">
+        <div class="col-3">
+            <button class="btn btn-dark"><a href="movies.html">Movies</a></button>
+        </div>
+        <div class="col-3">
+            <button class="btn btn-dark"><a href="series.html">Series</a></button>
+        </div>
+        <div class="col-3">
+            <button class="btn btn-dark"><a>Authors</a></button>
+        </div>
+        <div class="col-3">
+            <button class="btn btn-dark"><a>Users</a></button>
+        </div>
+    </div>
+</div>
+
+
+
+<body>
+
+
+<script type="module" >
+    import {initPage} from "../html_scripts/funcs.js";
+    let init_page = initPage()
+</script>
+
+</body>
+</html>

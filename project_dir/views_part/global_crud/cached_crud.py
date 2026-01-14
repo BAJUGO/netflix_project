@@ -32,22 +32,22 @@ def cache_response_wrapper(ttl: int, namespace: str, key_builder: Callable[[dict
     return decorator
 
 
-@cache_response_wrapper(20, "author", lambda kw: str(kw["author_id"]))
+@cache_response_wrapper(30, "author", lambda kw: str(kw["author_id"]))
 async def get_author_by_id_with_cache(session: AsyncSession, redis: Redis | None, author_id: int):
     return await default_crud.get_author_by_id_session(session, author_id)
 
 
-@cache_response_wrapper(20, "movie", lambda kw: str(kw["movie_id"]))
+@cache_response_wrapper(30, "movie", lambda kw: str(kw["movie_id"]))
 async def get_movie_by_id_with_cache(session: AsyncSession, redis: Redis | None, movie_id: int):
     return await default_crud.get_movie_by_id_session(session, movie_id)
 
 
-@cache_response_wrapper(20, "series", lambda kw: str(kw["series_id"]))
+@cache_response_wrapper(30, "series", lambda kw: str(kw["series_id"]))
 async def get_series_by_id_with_cache(session: AsyncSession, redis: Redis | None, series_id: int):
     return await default_crud.get_series_by_id_session(session, series_id)
 
 
-@cache_response_wrapper(20, "user", lambda kw: str(kw["user_id"]))
+@cache_response_wrapper(30, "user", lambda kw: str(kw["user_id"]))
 async def get_user_by_id_with_cache(session: AsyncSession, redis: Redis | None, user_id: int):
     return await default_crud.get_user_by_id_session(session, user_id)
 

@@ -1,4 +1,4 @@
-from fastapi import Depends, HTTPException
+from fastapi import Depends, HTTPException, Request
 from fastapi.security import OAuth2PasswordBearer
 
 from project_dir.authorization.token_enc_dec import decode_access_token
@@ -8,9 +8,16 @@ oauth2_schema = OAuth2PasswordBearer(tokenUrl="create_token")
 
 
 def get_current_user_access_token(
-    token: str = Depends(oauth2_schema),
-) -> AccessTokenData:
-    return AccessTokenData(**decode_access_token(token))
+    request: Request
+) -> AccessTokenData | None:
+    token = request.cookies.get("access_token")
+    try:
+        decode_access_token(token)
+        return AccessTokenData(**decode_access_token(token))
+    except Exception as e:
+        print(e)
+    raise HTTPException(status_code=401, detail="not authenticated")
+
 
 
 def get_user_with_role(required_role: list[str]):
