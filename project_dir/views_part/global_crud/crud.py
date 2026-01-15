@@ -1,3 +1,4 @@
+import json
 from typing import TypeVar
 
 from fastapi import HTTPException
@@ -29,7 +30,8 @@ async def model_to_schema(model: T, schema: type[P]) -> P:
 # BASE DB OPERATIONS (ORM)
 # =========================
 
-async def adder_session(session: AsyncSession, data: BaseModel, orm_model: type[T]) -> T:
+async def adder_session(session: AsyncSession, data: str, orm_model: type[T]) -> T:
+    data = json.loads(data)
     obj = orm_model(**data.model_dump())
     session.add(obj)
     await session.commit()
@@ -102,7 +104,7 @@ async def add_author_session(session: AsyncSession, author_in: schemas.AuthorCre
     return await model_to_schema(author, schemas.AuthorSchema)
 
 
-async def add_movie_session(session: AsyncSession, movie_in: schemas.MovieCreate) -> schemas.MovieSchema:
+async def add_movie_session(session: AsyncSession, movie_in: str) -> schemas.MovieSchema:
     movie = await adder_session(session=session, data=movie_in, orm_model=Movie)
     return await model_to_schema(movie, schemas.MovieSchema)
 

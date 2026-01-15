@@ -11,15 +11,35 @@
 <body>
 
 <div class="container mt-5">
-    <div class="row g-3">
-        <input class="col-2" id="new_movie_title" value="title">
+    <div class="row g-3 my-1">
+        <h4 class="col-2 text-center"><strong>Title</strong></h4>
+        <input class="col-2" id="new_movie_title">
     </div>
-    <div class="row g-3">
-        <input class="col-2" id="new_movie_year_of_issue" value="year of issue">
+    <div class="row g-3 my-1">
+        <h4 class="col-2 text-center">Year of Issue</h4>
+        <input type="number" class="col-2" id="new_movie_year_of_issue">
+    </div>
+    <div class="row g-3 my-1">
+        <h4 class="col-2 text-center">Genre</h4>
+        <input class="col-2" id="new_movie_genre">
+    </div>
+    <div class="row g-3 my-1">
+        <h4 class="col-2 text-center">Author ID</h4>
+        <input type="number" class="col-2" id="new_movie_author_id">
+    </div>
+    <div class="row g-3 my-1">
+        <h4 class="col-2 text-center">Description</h4>
+        <input class="col-10" id="new_movie_description">
+    </div>
+    <div class="row g-3 my-1">
+        <div class="col-2 text-end">
+
+        </div>
+        <button id="add_movie_button" class="col-2">Add movie</button>
     </div>
 </div>
 
-
+<script type="module" src="../html_scripts/add_movie.js"></script>
 
 </body>
 </html>

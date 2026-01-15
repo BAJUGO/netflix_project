@@ -88,7 +88,7 @@ async def get_author_by_id(author_id: int, session: AsyncSession = ses_dep, redi
 # ====================
 
 @router.post("/movies/add_movie", response_model=schemas.MovieSchema, dependencies=[auth.admin_or_mod_dep], tags=["movie", "add"])
-async def create_movie(movie_in: schemas.MovieCreate, session: AsyncSession = ses_dep):
+async def create_movie(movie_in: str, session: AsyncSession = ses_dep):
     return await global_crud.add_movie_session(session=session, movie_in=movie_in)
 
 

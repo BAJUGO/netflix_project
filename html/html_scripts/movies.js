@@ -19,4 +19,3 @@ form_for_all_movies.addEventListener('submit', event => {
 
 
 
-
