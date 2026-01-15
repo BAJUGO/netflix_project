@@ -32,7 +32,7 @@ async def model_to_schema(model: T, schema: type[P]) -> P:
 
 async def adder_session(session: AsyncSession, data: str, orm_model: type[T]) -> T:
     data = json.loads(data)
-    obj = orm_model(**data.model_dump())
+    obj = orm_model(**data)
     session.add(obj)
     await session.commit()
     await session.refresh(obj)
