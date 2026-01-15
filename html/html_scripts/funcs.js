@@ -1,28 +1,16 @@
-export async function custom_response(url, options = {}, to_json = true) {
-    let body = undefined
-    let headers = options.headers
-
-    if (options.form) {
-        body = options.form
-    } else if (options.body) {
-        body = options.body
-        headers["Content-Type"] = "application/json"
-    }
-
+//! данная функция применяется крайне редко, а именно только для вывода контента на экран
+//! Не знаю почему, но в данном случае response.json() выводится нормально, в отличии от fetch().then(response => response.json)
+export async function json_fetch(url, options = {}) {
     let resp = await fetch(url, {
         ...options,
-        headers,
-        body,
+        body: options.form ?? options.body,
         method: options.method ?? "GET"
     })
-    if (to_json) return resp.json()
-    return resp
-
+    return resp.json()
 }
 
 
 export function create_content_on_page(value, id_of_ul) {
-
     let ul_to_changed = document.getElementById(id_of_ul)
     let li_to_add = document.createElement("li")
     let main_element = document.createElement("h1")
@@ -35,10 +23,9 @@ export function create_content_on_page(value, id_of_ul) {
         ul_to_changed.appendChild(li_to_add)
         return
     }
+
     main_element.innerText = value["title"] ?? value["name"]
     li_to_add.appendChild(main_element)
-
-
 
     for (let obj in value) {
         if (obj === "title" || obj === "name") continue;
@@ -71,4 +58,15 @@ export function initClearButtons(class_ob_clearer_button) {
 
         };
     });
+}
+
+// TODO: сделать функцию unlogin user
+
+export async function unloginUser(event) {
+    event.preventDefault()
+    fetch("http://localhost:8000/deleteCookies", {credentials: "include"}).then(response => {
+        if (response.ok) {
+            window.location.href = "../html_pages/login_page.html"
+        }
+    })
 }

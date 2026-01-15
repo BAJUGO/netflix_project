@@ -1,10 +1,10 @@
-import {custom_response} from "./funcs.js";
+import {json_fetch} from "./funcs.js";
 
 async function isLogined() {
-    let resp = await fetch("http://localhost:8000/initPage", {credentials: "include"})
-    if (resp.ok) {
-        window.location.href = "../html_pages/main_page.html"
-    }
+    fetch("http://localhost:8000/initPage", {credentials: "include"}).then(resp => {
+        if (resp.ok) {
+            window.location.href = "../html_pages/main_page.html"
+        }})
 }
 //* ДВОЙНОЙ ЗАПРОС ОТПРАВЛЯЕТСЯ ИМЕННО ИЗ-ЗА ЭТОЙ ФУНКЦИИ! ЕСЛИ НУЖНО УБРАТЬ - УБЕРИ ЕЁ
 
@@ -44,7 +44,7 @@ login_form.addEventListener("submit", loginUser)
 // form.append("password", "kiril12AZ")
 //
 //
-// custom_response("http://localhost:8000/create_token", {method: "POST", form}).then(response => {
+// json_fetch("http://localhost:8000/create_token", {method: "POST", form}).then(response => {
 //     console.log(response)
 // })
 
@@ -57,7 +57,7 @@ async function loginUser(event) {
 
     email.value = ''
     password.value = ''
-    custom_response("http://localhost:8000/create_token", {method: "POST", form, credentials: "include"}, false).then(response => {
+    fetch("http://localhost:8000/create_token", {method: "POST", body: form, credentials: "include"}).then(response => {
     console.log(response)
     if (response.ok) {
         window.location.href = '../html_pages/main_page.html'
@@ -66,5 +66,8 @@ async function loginUser(event) {
         console.log("Неудачная попытка авторизации! Попробуйте ещё раз")
     }})
 }
+
+
+
 
 

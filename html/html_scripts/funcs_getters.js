@@ -1,4 +1,4 @@
-import {create_content_on_page, custom_response} from "./funcs.js";
+import {create_content_on_page, json_fetch} from "./funcs.js";
 
 const mapping = {
     movie: "movies",
@@ -12,7 +12,7 @@ export async function get_object_by_id(object_type, event){
     event.preventDefault()
     document.getElementById("clear_ul_1").click()
     let id = document.getElementById(`${object_type}_id`)
-    custom_response(`http://localhost:8000/${mapping[object_type]}/${id.value}`, {
+    json_fetch(`http://localhost:8000/${mapping[object_type]}/${id.value}`, {
         method: "GET",
         credentials: "include"
     }).then(response => {
@@ -27,7 +27,7 @@ export async function get_all_objects(object_type, event) {
     event.preventDefault()
     document.getElementById("clear_ul_2").click()
     const path = mapping[object_type]
-    custom_response(`http://localhost:8000/${path}/get_${path}`, {
+    json_fetch(`http://localhost:8000/${path}/get_${path}`, {
         method: "GET",
         credentials: "include"
     }).then(response => {

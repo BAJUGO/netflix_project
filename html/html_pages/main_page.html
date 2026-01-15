@@ -10,6 +10,9 @@
     <title>Title</title>
 </head>
 
+<button id="unlogin">Unlogin</button>
+
+
 <div class="container my-5">
     <h1 class="text-center">Welcome on the main page!</h1>
     <p class="text-center">Seems like you have completed an authentication!</p>
@@ -34,17 +37,30 @@
         <div class="col-3">
             <button class="btn btn-success"><a style="color: whitesmoke; text-decoration: none " href="add_movie.html">Add movie</a></button>
         </div>
+        <div class="col-3">
+            <button class="btn btn-success"><a style="color: whitesmoke; text-decoration: none " href="add_series.html">Add series</a></button>
+        </div>
+        <div class="col-3">
+            <button class="btn btn-success"><a style="color: whitesmoke; text-decoration: none " href="add_author.html">Add author</a></button>
+        </div>
+    </div>
+    <div class="row g-3 mb-2">
+        <div class="col-3">
+            <button class="btn btn-warning"><a style="color: whitesmoke; text-decoration: none; text-shadow: 1px 2px 4px #000000; " href="update_movie.html" >Update movie</a></button>
+        </div>
     </div>
 </div>
-
 
 
 <body>
 
 
 <script type="module" >
-    import {initPage} from "../html_scripts/funcs.js";
+    import {initPage, unloginUser} from "../html_scripts/funcs.js";
     let init_page = initPage()
+    document.getElementById("unlogin").addEventListener('click', (event) => {
+        unloginUser(event)
+    })
 </script>
 
 </body>

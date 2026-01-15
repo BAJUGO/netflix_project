@@ -1,7 +1,7 @@
 import json
-from typing import TypeVar
+from typing import TypeVar, Annotated
 
-from fastapi import HTTPException
+from fastapi import HTTPException, Body
 from pydantic import BaseModel
 from sqlalchemy import Select, update
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -30,8 +30,7 @@ async def model_to_schema(model: T, schema: type[P]) -> P:
 # BASE DB OPERATIONS (ORM)
 # =========================
 
-async def adder_session(session: AsyncSession, data: str, orm_model: type[T]) -> T:
-    data = json.loads(data)
+async def adder_session(session: AsyncSession, data: dict, orm_model: type[T]) -> T:
     obj = orm_model(**data)
     session.add(obj)
     await session.commit()
@@ -104,7 +103,9 @@ async def add_author_session(session: AsyncSession, author_in: schemas.AuthorCre
     return await model_to_schema(author, schemas.AuthorSchema)
 
 
-async def add_movie_session(session: AsyncSession, movie_in: str) -> schemas.MovieSchema:
+async def add_movie_session(session: AsyncSession, movie_body: Annotated[str, Body()]) -> schemas.MovieSchema:
+    movie_body_json = json.loads(movie_body)
+    movie_in = movie_body_json["movie_body"]
     movie = await adder_session(session=session, data=movie_in, orm_model=Movie)
     return await model_to_schema(movie, schemas.MovieSchema)
 
