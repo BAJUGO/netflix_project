@@ -1,4 +1,5 @@
 import {mapping} from "./funcs_getters.js";
+import {json_fetch} from "./funcs.js";
 
 
 export async function add_object(event, object_type, list_of_attrs) {
@@ -17,7 +18,7 @@ export async function add_object(event, object_type, list_of_attrs) {
         future_body[attrs[attr]] = attr_value
     }
 
-    fetch(`http://localhost:8000/${mapping[object_type]}/add_${object_type}`, {method: "POST",credentials: "include", body: JSON.stringify({new_body: future_body})}).then(response => {
+    json_fetch(`http://localhost:8000/${mapping[object_type]}/add_${object_type}`, {method: "POST",credentials: "include", body: JSON.stringify({new_body: future_body})}).then(response => {
         console.log(response)
     })
 }

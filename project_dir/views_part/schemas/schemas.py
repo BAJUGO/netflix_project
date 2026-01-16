@@ -46,12 +46,13 @@ class SeriesPatch(BaseModel):
     seasons: int | None = None
     description: str | None = None
     genre: str | None = None
+    author_id: int | None = None
 
 
 class SeriesCreate(BaseModel):
     title: str = Field(max_length=35)
-    episodes: int = Field(min_length=1)
-    seasons: int = Field(min_length=1)
+    episodes: int = Field(ge=1)
+    seasons: int = Field(ge=1)
     description: str | None = None
     genre: str = Field(min_length=3, max_length=25)
     author_id: int
