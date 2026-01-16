@@ -1,7 +1,7 @@
 import json
 from typing import TypeVar, Annotated
 
-from fastapi import HTTPException, Body
+from fastapi import HTTPException, Body, Response
 from pydantic import BaseModel
 from sqlalchemy import Select, update
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -180,12 +180,16 @@ async def get_users_session(session: AsyncSession) -> list[str]:
 # CHANGE ROLE
 # =========================
 
-async def change_role_session(session: AsyncSession, user_id: int, new_role: str) -> dict:
+async def change_role_session(session: AsyncSession, user_id: int, new_role: json_body) -> Response:
+    new_role_json = json.loads(new_role)
+    new_role = new_role_json["role_to_change"]
     user = await getter_by_id_session(session=session, orm_model=User, obj_id=user_id)
+    if user.role == "admin":
+        return Response(status_code=400, content="You can't change role of admin user")
     user.role = new_role
     await session.commit()
     await session.refresh(user)
-    return {user.visible_name: user.role}
+    return Response(status_code=200, content=json.dumps({user.visible_name: user.role}))
 
 
 # =========================

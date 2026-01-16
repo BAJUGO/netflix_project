@@ -90,6 +90,7 @@ async def delete_user(user_id: int, session: AsyncSession = ses_dep):
 
 
 @router.patch("/role_setter/{user_id}", tags=["user", "update"], dependencies=[admin_dep])
-async def change_user_role(user_id: int, role_to_change: str = Form(...),
+async def change_user_role(user_id: int, role_to_change: json_body,
                            session: AsyncSession = ses_dep):
+    print(role_to_change)
     return await global_crud.change_role_session(session=session, user_id=user_id, new_role=role_to_change)

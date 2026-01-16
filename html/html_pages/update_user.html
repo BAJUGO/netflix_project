@@ -3,8 +3,50 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+    >
 </head>
 <body>
+
+<div class="container mt-5">
+    <div class="row g-3 my-1">
+        <h4 class="col-2 text-center"><strong>user ID</strong></h4>
+        <input type="number" class="col-2" id="update_user_id">
+    </div>
+    <div class="row g-3 my-1">
+        <h4 class="col-2 text-center">New role</h4>
+        <input type="text" class="col-2" id="update_user_role">
+    </div>
+
+    <div class="row g-3 my-1">
+        <div class="col-2 text-end">
+        </div>
+        <button title="Будьте внимательны при изменении роли!" id="update user" class="col-2">UPDATE user</button>
+    </div>
+</div>
+
+<script type="module">
+    import {json_fetch} from "../html_scripts/funcs.js";
+
+
+
+
+    document.getElementById("update user").addEventListener('click', event => {
+        let user_id_el = document.getElementById("update_user_id")
+        let user_id = user_id_el.value
+        let new_role_el = document.getElementById("update_user_role")
+        let new_role = new_role_el.value
+        json_fetch(`http://localhost:8000/role_setter/${user_id}`, {method: "PATCH", credentials: "include", body: JSON.stringify({"role_to_change": new_role})}).then(response => {
+            console.log(response)
+
+    })
+        user_id_el.value = ''
+        new_role_el.value = ''
+    })
+
+</script>
 
 </body>
 </html>
