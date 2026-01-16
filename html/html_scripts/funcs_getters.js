@@ -1,6 +1,6 @@
 import {create_content_on_page, json_fetch} from "./funcs.js";
 
-const mapping = {
+export const mapping = {
     movie: "movies",
     series: "series",
     author: "authors",

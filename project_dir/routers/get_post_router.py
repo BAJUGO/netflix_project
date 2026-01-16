@@ -90,8 +90,8 @@ async def get_author_by_id(author_id: int, session: AsyncSession = ses_dep, redi
 # ====================
 
 @router.post("/movies/add_movie", response_model=schemas.MovieSchema, dependencies=[auth.admin_or_mod_dep], tags=["movie", "add"])
-async def create_movie(movie_body: Annotated[str, Body()], session: AsyncSession = ses_dep):
-    return await global_crud.add_movie_session(session=session, movie_body=movie_body)
+async def create_movie(new_body: Annotated[str, Body()], session: AsyncSession = ses_dep):
+    return await global_crud.add_movie_session(session=session, movie_body=new_body)
 
 
 @router.get("/movies/get_movies", response_model=list[schemas.MovieSchema], tags=["movie", "get"], dependencies=[Depends(auth.get_current_user_access_token)])

@@ -1,4 +1,6 @@
-from fastapi import Form, APIRouter
+from typing import Annotated
+
+from fastapi import Form, APIRouter, Body
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from project_dir.authorization import admin_or_mod_dep, admin_dep
@@ -7,6 +9,7 @@ from project_dir.core import ses_dep
 import project_dir.views_part.global_crud as global_crud
 import project_dir.views_part.schemas as schemas
 
+json_body = Annotated[str, Body()]
 
 router = APIRouter()
 
@@ -45,16 +48,16 @@ async def delete_movie(movie_id: int, session: AsyncSession = ses_dep):
 
 @router.put("/movies/{movie_id}", response_model=schemas.MovieSchema, dependencies=[admin_or_mod_dep],
             tags=["movie", "update"])
-async def full_update_movie(movie_id: int, movie_schema: schemas.MovieCreate,
+async def full_update_movie(movie_id: int, update_movie_body: json_body,
                             session: AsyncSession = ses_dep):
-    return await global_crud.full_update_movie_session(session=session, movie_id=movie_id, movie_schema=movie_schema)
+    return await global_crud.full_update_movie_session(session=session, movie_id=movie_id, update_movie_body=update_movie_body)
 
 
 @router.patch("/movies/{movie_id}", response_model=schemas.MovieSchema, dependencies=[admin_or_mod_dep],
               tags=["movie", "update"])
-async def patch_update_movie(movie_id: int, movie_schema: schemas.MoviePatch,
+async def patch_update_movie(movie_id: int, update_body: json_body,
                              session: AsyncSession = ses_dep):
-    return await global_crud.patch_movie_session(session=session, movie_id=movie_id, movie_schema=movie_schema)
+    return await global_crud.patch_movie_session(session=session, movie_id=movie_id, update_movie_body=update_body)
 
 
 # =========================

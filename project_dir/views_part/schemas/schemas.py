@@ -21,10 +21,11 @@ class AuthorSchema(BaseReturn, AuthorCreate):
 
 
 class MoviePatch(BaseModel):
-    title: str | None
-    year_of_issue: int | None
+    title: str | None = None
+    year_of_issue: int | None = None
     description: str | None = None
-    genre: str | None
+    genre: str | None = None
+    author_id: int | None = None
 
 
 class MovieCreate(BaseModel):
