@@ -45,7 +45,7 @@ async def create_user(user_in: schemas.UserCreate, session: AsyncSession = ses_d
     return await global_crud.add_user_session(user_in=user_in, session=session)
 
 
-@router.get("/users/get_users", response_model=list[str], tags=["user", "get"], dependencies=[auth.admin_dep])
+@router.get("/users/get_users", response_model=list, tags=["user", "get"], dependencies=[auth.admin_dep])
 async def get_all_users(session: AsyncSession = ses_dep):
     return await global_crud.get_users_session(session)
 

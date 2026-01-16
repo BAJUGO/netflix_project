@@ -172,8 +172,8 @@ async def get_series_session(session: AsyncSession) -> list[schemas.SeriesSchema
     return await models_to_schemas(await getter_session(session=session, orm_model=Series), schemas.SeriesSchema)
 
 
-async def get_users_session(session: AsyncSession) -> list[str]:
-    return [user.visible_name for user in await getter_session(session=session, orm_model=User)]
+async def get_users_session(session: AsyncSession) -> list:
+    return [[user.visible_name, user.role, user.id] for user in await getter_session(session=session, orm_model=User)]
 
 
 # =========================
