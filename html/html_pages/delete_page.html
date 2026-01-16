@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+    >
+</head>
+
+<body>
+<div class="container py-5">
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="card-custom p-3 h-100">
+                <form id="form_for_deleting_movie" class="d-flex gap-2 align-items-center">
+                    <input id="movie_id" type="number" class="form-control" placeholder="Movie ID">
+                    <button class="btn btn-danger" id="delete_movie_by_id_button">Movie ID</button>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card-custom p-3 h-100">
+                <form id="form_for_deleting_series" class="d-flex gap-2 align-items-center">
+                    <input id="series_id" type="number" class="form-control" placeholder="Series ID">
+                    <button class="btn btn-danger" id="delete_series_by_id_button">Series ID</button>
+                </form>
+            </div>
+        </div
+        >
+        <div class="col-md-4">
+            <div class="card-custom p-3 h-100">
+                <form id="form_for_deleting_author" class="d-flex gap-2 align-items-center">
+                    <input id="author_id" type="number" class="form-control" placeholder="Author ID">
+                    <button class="btn btn-danger" id="delete_author_by_id_button">Author ID</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="module" src="../html_scripts/funcs_deleters.js">
+</script>
+
+</body>
+</html>
