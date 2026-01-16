@@ -25,6 +25,7 @@
     <title>Title</title>
 </head>
 <body>
+<button id="unlogin">Unlogin</button>
 
 <div class="container py-5">
 
@@ -88,6 +89,12 @@
 </div>
 
 
-<script type="module" src="../html_scripts/series.js"></script>
+<script type="module" src="../html_scripts/series.js">
+
+</script>
+<script type="module">
+    import {includeUnlogin} from "../html_scripts/funcs.js";
+    includeUnlogin()
+</script>
 </body>
 </html>

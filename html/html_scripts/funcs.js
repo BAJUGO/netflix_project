@@ -60,7 +60,7 @@ export function initClearButtons(class_ob_clearer_button) {
     });
 }
 
-// TODO: сделать функцию unlogin user
+
 
 export async function unloginUser(event) {
     event.preventDefault()
@@ -68,5 +68,12 @@ export async function unloginUser(event) {
         if (response.ok) {
             window.location.href = "../html_pages/login_page.html"
         }
+    })
+}
+
+export async function includeUnlogin() {
+    let init_page = initPage()
+    document.getElementById("unlogin").addEventListener('click', (event) => {
+        unloginUser(event)
     })
 }

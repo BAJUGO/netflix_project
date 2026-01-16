@@ -9,6 +9,7 @@
     >
 </head>
 <body>
+<button id="unlogin">Unlogin</button>
 
 <div class="container mt-5">
     <div class="row g-3 my-1">
@@ -29,10 +30,6 @@
 
 <script type="module">
     import {json_fetch} from "../html_scripts/funcs.js";
-
-
-
-
     document.getElementById("update user").addEventListener('click', event => {
         let user_id_el = document.getElementById("update_user_id")
         let user_id = user_id_el.value
@@ -45,6 +42,8 @@
         user_id_el.value = ''
         new_role_el.value = ''
     })
+    import {includeUnlogin} from "../html_scripts/funcs.js";
+    includeUnlogin()
 
 </script>
 

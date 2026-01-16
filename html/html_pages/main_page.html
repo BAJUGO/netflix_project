@@ -66,11 +66,8 @@
 
 
 <script type="module" >
-    import {initPage, unloginUser} from "../html_scripts/funcs.js";
-    let init_page = initPage()
-    document.getElementById("unlogin").addEventListener('click', (event) => {
-        unloginUser(event)
-    })
+    import {includeUnlogin} from "../html_scripts/funcs.js";
+    includeUnlogin()
 </script>
 
 </body>

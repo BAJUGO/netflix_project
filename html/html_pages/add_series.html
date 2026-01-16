@@ -9,6 +9,7 @@
     >
 </head>
 <body>
+<button id="unlogin">Unlogin</button>
 
 <div class="container mt-5">
     <div class="row g-3 my-1">
@@ -47,7 +48,12 @@
     </div>
 </div>
 
-<script type="module" src="../html_scripts/add_series.js"></script>
+<script type="module" src="../html_scripts/add_series.js">
+</script>
+<script type="module">
+    import {includeUnlogin} from "../html_scripts/funcs.js";
+    includeUnlogin()
+</script>
 
 
 </body>

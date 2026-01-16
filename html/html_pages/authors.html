@@ -12,6 +12,8 @@
 </head>
 
 <body>
+<button id="unlogin">Unlogin</button>
+
 <div class="container py-5">
   <div class="row mb-4">
     <div class="col text-center">
@@ -70,7 +72,10 @@
 </div>
 
 <script type="module" src="../html_scripts/authors.js">
-
+</script>
+<script type="module">
+  import {includeUnlogin} from "../html_scripts/funcs.js";
+    includeUnlogin()
 </script>
 </body>
 </html>

@@ -1,7 +1,7 @@
-import {create_content_on_page, initPage, initClearButtons} from "./funcs.js";
+import {create_content_on_page, initClearButtons} from "./funcs.js";
 import {get_all_objects, get_object_by_id} from "./funcs_getters.js";
 
-let init_Page = initPage()
+
 initClearButtons(".clear_ul_button")
 
 
