@@ -180,12 +180,12 @@ async def get_users_session(session: AsyncSession) -> list[str]:
 # CHANGE ROLE
 # =========================
 
-async def change_role_session(session: AsyncSession, user_id: int, new_role: str) -> str:
+async def change_role_session(session: AsyncSession, user_id: int, new_role: str) -> dict:
     user = await getter_by_id_session(session=session, orm_model=User, obj_id=user_id)
     user.role = new_role
     await session.commit()
     await session.refresh(user)
-    return f"{user.visible_name} role has been changed to {user.role}"
+    return {user.visible_name: user.role}
 
 
 # =========================

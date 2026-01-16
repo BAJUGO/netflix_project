@@ -42,6 +42,7 @@ class MovieSchema(BaseReturn, MovieCreate):
 
 class SeriesPatch(BaseModel):
     title: str | None = None
+    year_of_issue: int | None = None
     episodes: int | None = None
     seasons: int | None = None
     description: str | None = None
@@ -51,6 +52,7 @@ class SeriesPatch(BaseModel):
 
 class SeriesCreate(BaseModel):
     title: str = Field(max_length=35)
+    year_of_issue: int = Field(ge=1980, le=2027)
     episodes: int = Field(ge=1)
     seasons: int = Field(ge=1)
     description: str | None = None
