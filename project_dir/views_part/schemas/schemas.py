@@ -29,10 +29,10 @@ class MoviePatch(BaseModel):
 
 
 class MovieCreate(BaseModel):
-    title: str
-    year_of_issue: int
+    title: str = Field(max_length=35)
+    year_of_issue: int = Field(ge=1950, le=2027)
     description: str | None = None
-    genre: str
+    genre: str = Field(min_length=3, max_length=25)
     author_id: int
 
 
@@ -49,11 +49,11 @@ class SeriesPatch(BaseModel):
 
 
 class SeriesCreate(BaseModel):
-    title: str
-    episodes: int
-    seasons: int
+    title: str = Field(max_length=35)
+    episodes: int = Field(min_length=1)
+    seasons: int = Field(min_length=1)
     description: str | None = None
-    genre: str
+    genre: str = Field(min_length=3, max_length=25)
     author_id: int
 
 
