@@ -1,6 +1,4 @@
-from typing import Annotated
-
-from fastapi import APIRouter, Depends, Response, Body
+from fastapi import APIRouter, Depends, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 
 import project_dir.authorization as auth
@@ -9,6 +7,7 @@ import project_dir.views_part.global_crud.cached_crud as cached_crud
 import project_dir.views_part.schemas as schemas
 from project_dir.core import ses_dep
 from project_dir.logging_and_exc.pre_post_up import get_redis
+from project_dir.routers.delete_put_patch_router import json_body
 
 router = APIRouter(dependencies=[])
 
@@ -61,8 +60,8 @@ async def get_user_by_id(user_id: int, session: AsyncSession = ses_dep, redis=De
 # ====================
 
 @router.post("/authors/add_author", response_model=schemas.AuthorSchema, dependencies=[auth.admin_or_mod_dep], tags=["author", "add"])
-async def create_author(author_in: schemas.AuthorCreate, session: AsyncSession = ses_dep):
-    return await global_crud.add_author_session(session=session, author_in=author_in)
+async def create_author(new_body: json_body, session: AsyncSession = ses_dep):
+    return await global_crud.add_author_session(session=session, new_author_body=new_body)
 
 
 @router.get("/authors/get_authors", response_model=list[schemas.AuthorSchema], tags=["author", "get"], dependencies=[Depends(auth.get_current_user_access_token)])
@@ -90,8 +89,8 @@ async def get_author_by_id(author_id: int, session: AsyncSession = ses_dep, redi
 # ====================
 
 @router.post("/movies/add_movie", response_model=schemas.MovieSchema, dependencies=[auth.admin_or_mod_dep], tags=["movie", "add"])
-async def create_movie(new_body: Annotated[str, Body()], session: AsyncSession = ses_dep):
-    return await global_crud.add_movie_session(session=session, movie_body=new_body)
+async def create_movie(new_body: json_body, session: AsyncSession = ses_dep):
+    return await global_crud.add_movie_session(session=session, new_movie_body=new_body)
 
 
 @router.get("/movies/get_movies", response_model=list[schemas.MovieSchema], tags=["movie", "get"], dependencies=[Depends(auth.get_current_user_access_token)])
@@ -114,8 +113,8 @@ async def get_movie_author(movie_id: int, session: AsyncSession = ses_dep, redis
 # ====================
 
 @router.post("/series/add_series", response_model=schemas.SeriesSchema, dependencies=[auth.admin_or_mod_dep], tags=["series", "add"])
-async def create_series(series_in: schemas.SeriesCreate, session: AsyncSession = ses_dep):
-    return await global_crud.add_series_session(series_in=series_in, session=session)
+async def create_series(new_body: json_body, session: AsyncSession = ses_dep):
+    return await global_crud.add_series_session(session=session, new_series_body=new_body)
 
 
 @router.get("/series/get_series", response_model=list[schemas.SeriesSchema], tags=["series", "get"], dependencies=[Depends(auth.get_current_user_access_token)])

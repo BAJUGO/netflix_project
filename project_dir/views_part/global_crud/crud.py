@@ -10,6 +10,8 @@ from project_dir.authorization import hash_password
 from project_dir.models import Author, Movie, Series, User
 import project_dir.views_part.schemas as schemas
 
+from project_dir.routers.delete_put_patch_router import json_body
+
 T = TypeVar("T", Movie, Series, Author, User)
 P = TypeVar("P", bound=BaseModel)
 
@@ -30,11 +32,10 @@ async def model_to_schema(model: T, schema: type[P]) -> P:
 # BASE DB OPERATIONS (ORM)
 # =========================
 
-async def adder_session(session: AsyncSession, object_in: P, orm_model: type[T]) -> T:
+async def adder_session(session: AsyncSession, orm_model: type[T], object_in: P) -> T:
     obj = orm_model(**object_in.model_dump())
     session.add(obj)
     await session.commit()
-    await session.refresh(obj)
     return obj
 
 
@@ -65,10 +66,16 @@ async def patch_updater_session(session: AsyncSession, orm_model: type[T], obj_i
     return await getter_by_id_session(session=session, orm_model=orm_model, obj_id=obj_id)
 
 
-async def full_updater_session(session: AsyncSession, orm_model: type[T], obj_id: int, object_in: P) -> T:
-    await session.execute(update(orm_model).where(orm_model.id == obj_id).values(**object_in.model_dump()))
-    await session.commit()
-    return await getter_by_id_session(session=session, orm_model=orm_model, obj_id=obj_id)
+# async def full_updater_session(session: AsyncSession, orm_model: type[T], obj_id: int, object_in: P) -> T:
+#     await session.execute(update(orm_model).where(orm_model.id == obj_id).values(**object_in.model_dump()))
+#     await session.commit()
+#     return await getter_by_id_session(session=session, orm_model=orm_model, obj_id=obj_id)
+
+
+async def json_string_to_schema_session(body: json_body, type_of_body: str, to_schema: type[P]) -> P:
+    update_object_body_json = json.loads(body)
+    object_in_js = update_object_body_json[type_of_body]
+    return to_schema(**object_in_js)
 
 
 # =========================
@@ -97,21 +104,22 @@ async def get_user_by_id_session(session: AsyncSession, user_id: int):
 # =========================
 # ADD
 # =========================
+t_o_b_n = "new_body"
 
-async def add_author_session(session: AsyncSession, author_in: schemas.AuthorCreate) -> schemas.AuthorSchema:
-    author = await adder_session(session=session, object_in=author_in, orm_model=Author)
+async def add_author_session(session: AsyncSession, new_author_body: json_body) -> schemas.AuthorSchema:
+    author_in = await json_string_to_schema_session(body=new_author_body, type_of_body=t_o_b_n, to_schema=schemas.AuthorCreate)
+    author = await adder_session(session=session, orm_model=Author, object_in=author_in)
     return await model_to_schema(author, schemas.AuthorSchema)
 
 
-async def add_movie_session(session: AsyncSession, movie_body: Annotated[str, Body()]) -> schemas.MovieSchema:
-    movie_body_json = json.loads(movie_body)
-    movie_in_js = movie_body_json["new_body"]
-    movie_in = schemas.MovieCreate(**movie_in_js)
-    movie = await adder_session(session=session, object_in=movie_in, orm_model=Movie)
+async def add_movie_session(session: AsyncSession, new_movie_body: Annotated[str, Body()]) -> schemas.MovieSchema:
+    movie_in = await json_string_to_schema_session(body=new_movie_body, type_of_body=t_o_b_n, to_schema=schemas.MovieCreate)
+    movie = await adder_session(session=session,orm_model=Movie, object_in=movie_in)
     return await model_to_schema(movie, schemas.MovieSchema)
 
 
-async def add_series_session(session: AsyncSession, series_in: schemas.SeriesCreate) -> schemas.SeriesSchema:
+async def add_series_session(session: AsyncSession, new_series_body: json_body) -> schemas.SeriesSchema:
+    series_in = await json_string_to_schema_session(body=new_series_body, type_of_body=t_o_b_n, to_schema=schemas.SeriesCreate)
     series = await adder_session(session=session, object_in=series_in, orm_model=Series)
     return await model_to_schema(series, schemas.SeriesSchema)
 
@@ -183,38 +191,40 @@ async def change_role_session(session: AsyncSession, user_id: int, new_role: str
 # =========================
 # PATCH
 # =========================
+t_o_b_u = "update_body"
 
-async def patch_author_session(session: AsyncSession, author_id: int, author_schema: schemas.AuthorPatch) -> schemas.AuthorSchema:
-    return await model_to_schema(await patch_updater_session(session=session, orm_model=Author, obj_id=author_id, schema_patch=author_schema), schemas.AuthorSchema)
+async def patch_author_session(session: AsyncSession, author_id: int, update_author_body: json_body) -> schemas.AuthorSchema:
+    author_in = await json_string_to_schema_session(body=update_author_body, type_of_body=t_o_b_u, to_schema=schemas.AuthorPatch)
+    author = await patch_updater_session(session=session, orm_model=Author, obj_id=author_id, object_in=author_in)
+    return await model_to_schema(author, schemas.AuthorSchema)
 
 
-async def patch_movie_session(session: AsyncSession, movie_id: int, update_movie_body: Annotated[str, Body()]) -> schemas.MovieSchema:
-    update_movie_body_json = json.loads(update_movie_body)
-    movie_in_js = update_movie_body_json["update_body"]
-    movie_in = schemas.MoviePatch(**movie_in_js)
+async def patch_movie_session(session: AsyncSession, movie_id: int, update_movie_body: json_body) -> schemas.MovieSchema:
+    movie_in = await json_string_to_schema_session(body=update_movie_body, type_of_body=t_o_b_u, to_schema=schemas.MoviePatch)
     movie = await patch_updater_session(session=session, orm_model=Movie, obj_id=movie_id, object_in=movie_in)
     return await model_to_schema(movie, schemas.MovieSchema)
 
 
-
-async def patch_series_session(session: AsyncSession, series_id: int, series_schema: schemas.SeriesPatch) -> schemas.SeriesSchema:
-    return await model_to_schema(await patch_updater_session(session=session, orm_model=Series, obj_id=series_id, schema_patch=series_schema), schemas.SeriesSchema)
+async def patch_series_session(session: AsyncSession, series_id: int, update_series_body: json_body) -> schemas.SeriesSchema:
+    series_in = await json_string_to_schema_session(body=update_series_body, type_of_body=t_o_b_u, to_schema=schemas.MoviePatch)
+    series = await patch_updater_session(session=session, orm_model=Movie, obj_id=series_id, object_in=series_in)
+    return await model_to_schema(series, schemas.SeriesSchema)
 
 
 # =========================
 # FULL UPDATE
 # =========================
 
-async def full_update_author_session(session: AsyncSession, author_id: int, author_schema: schemas.AuthorCreate) -> schemas.AuthorSchema:
-    return await model_to_schema(await full_updater_session(session=session, orm_model=Author, obj_id=author_id, schema_patch=author_schema), schemas.AuthorSchema)
-
-
-async def full_update_movie_session(session: AsyncSession, movie_id: int, update_movie_body: Annotated[str, Body()]) -> Movie:
-    update_movie_body_json = json.loads(update_movie_body)
-    movie_in_js = update_movie_body_json["update_body"]
-    movie_in = schemas.MovieCreate(**movie_in_js)
-    return await full_updater_session(session=session, orm_model=Movie, obj_id=movie_id, object_in=movie_in)
-
-
-async def full_update_series_session(session: AsyncSession, series_id: int, series_schema: schemas.SeriesCreate) -> schemas.SeriesSchema:
-    return await model_to_schema(await full_updater_session(session=session, orm_model=Series, obj_id=series_id, schema_patch=series_schema), schemas.SeriesSchema)
+# async def full_update_author_session(session: AsyncSession, author_id: int, author_schema: schemas.AuthorCreate) -> schemas.AuthorSchema:
+#     return await model_to_schema(await full_updater_session(session=session, orm_model=Author, obj_id=author_id, schema_patch=author_schema), schemas.AuthorSchema)
+#
+#
+# async def full_update_movie_session(session: AsyncSession, movie_id: int, update_movie_body: Annotated[str, Body()]) -> Movie:
+#     update_movie_body_json = json.loads(update_movie_body)
+#     movie_in_js = update_movie_body_json["update_body"]
+#     movie_in = schemas.MovieCreate(**movie_in_js)
+#     return await full_updater_session(session=session, orm_model=Movie, obj_id=movie_id, object_in=movie_in)
+#
+#
+# async def full_update_series_session(session: AsyncSession, series_id: int, series_schema: schemas.SeriesCreate) -> schemas.SeriesSchema:
+#     return await model_to_schema(await full_updater_session(session=session, orm_model=Series, obj_id=series_id, schema_patch=series_schema), schemas.SeriesSchema)
