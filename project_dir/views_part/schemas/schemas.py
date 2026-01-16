@@ -60,6 +60,7 @@ class SeriesCreate(BaseModel):
     author_id: int
 
 
+
 class SeriesSchema(BaseReturn, SeriesCreate):
     pass
 
