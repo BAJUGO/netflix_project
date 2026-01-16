@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+    >
+    <title>Title</title>
+</head>
+<body>
+
+<div class="container mt-5">
+    <div class="row g-3 my-1">
+        <h4 class="col-2 text-center"><strong>Author ID</strong></h4>
+        <input type="number" class="col-2" id="update_author_id">
+    </div>
+    <div class="row g-3 my-1">
+        <h4 class="col-2 text-center">Name</h4>
+        <input type="text" class="col-2" id="update_author_name">
+    </div>
+    <div class="row g-3 my-1">
+        <h4 class="col-2 text-center">Age</h4>
+        <input type="number" class="col-2" id="update_author_age">
+    </div>
+    
+    <div class="row g-3 my-1">
+        <div class="col-2 text-end">
+        </div>
+        <button title="Пустые параметры будут проигнорированны" id="update author" class="col-2">UPDATE author</button>
+    </div>
+</div>
+
+<script type="module" src="../html_scripts/update_author.js"></script>
+
+</body>
+</html>
