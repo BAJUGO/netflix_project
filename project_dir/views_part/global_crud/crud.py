@@ -207,7 +207,7 @@ async def patch_movie_session(session: AsyncSession, movie_id: int, update_movie
 
 async def patch_series_session(session: AsyncSession, series_id: int, update_series_body: json_body) -> schemas.SeriesSchema:
     series_in = await json_string_to_schema_session(body=update_series_body, type_of_body=t_o_b_u, to_schema=schemas.MoviePatch)
-    series = await patch_updater_session(session=session, orm_model=Movie, obj_id=series_id, object_in=series_in)
+    series = await patch_updater_session(session=session, orm_model=Series, obj_id=series_id, object_in=series_in)
     return await model_to_schema(series, schemas.SeriesSchema)
 
 
