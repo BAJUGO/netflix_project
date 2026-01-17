@@ -16,7 +16,7 @@ async def check_the_data(request: Request, response: Response, token=Depends(aut
             response.status_code = 200
             return response
         except Exception as e:
-            log_info(data=f"{str(e)} \n", where_to_load="../logging_and_exc/exceptions_log.txt")
+            #log_info(data=f"{str(e)} \n", where_to_load="../logging_and_exc/exceptions_log.txt")
             response.status_code = 401
             return response
 
@@ -29,7 +29,8 @@ async def delete_cookies(request: Request, response: Response):
             response.delete_cookie(key="access_token", path="/")
             response.delete_cookie(key="refresh_token", path="/")
         except Exception as e:
-            log_info(data=f"{str(e)} \n", where_to_load="../logging_and_exc/exceptions_log.txt")
+            pass
+            #log_info(data=f"{str(e)} \n", where_to_load="../logging_and_exc/exceptions_log.txt")
         response.status_code, response.content = 200, "ok"
         return response
     response.status_code = 401

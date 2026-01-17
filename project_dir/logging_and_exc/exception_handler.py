@@ -28,10 +28,10 @@ def custom_exception_handler(app: FastAPI):
             detail = (
                 "Such email was already registered! Either login or write other email"
             )
-        log_info(
-            data=f"Integrity exception: {detail}\nTime: {now} - Ip: {ip}\nPath: {path}\n\n",
-            where_to_load="exceptions_log.txt",
-        )
+        # log_info(
+        #     data=f"Integrity exception: {detail}\nTime: {now} - Ip: {ip}\nPath: {path}\n\n",
+        #     where_to_load="exceptions_log.txt",
+        # )
         return JSONResponse(status_code=401, content={"detail": detail})
 
     @app.exception_handler(HTTPException)
@@ -40,10 +40,10 @@ def custom_exception_handler(app: FastAPI):
         ip = str(request.client.host)
         path = str(request.base_url)
         method = str(request.method)
-        log_info(
-            data=f"HTTPException: {exc.detail}. s_code: {exc.status_code}\nTime: {now} - Ip: {ip}\nPath: {path} + method: {method}\n\n",
-            where_to_load="exceptions_log.txt",
-        )
+        # log_info(
+        #     data=f"HTTPException: {exc.detail}. s_code: {exc.status_code}\nTime: {now} - Ip: {ip}\nPath: {path} + method: {method}\n\n",
+        #     where_to_load="exceptions_log.txt",
+        # )
         return await http_exception_handler(request, exc)
 
     @app.exception_handler(ExpiredSignatureError)
@@ -52,10 +52,10 @@ def custom_exception_handler(app: FastAPI):
         ip = str(request.client.host)
         path = str(request.base_url)
         method = str(request.method)
-        log_info(
-            data=f"Expired Signature Error. \nTime: {now} - Ip: {ip}\nPath: {path} + method: {method}\n\n",
-            where_to_load="exceptions_log.txt",
-        )
+        # log_info(
+        #     data=f"Expired Signature Error. \nTime: {now} - Ip: {ip}\nPath: {path} + method: {method}\n\n",
+        #     where_to_load="exceptions_log.txt",
+        # )
         return JSONResponse(
             status_code=401, content={"detail": "your token is expired. Relogin"}
         )

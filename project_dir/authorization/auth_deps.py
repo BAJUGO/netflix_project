@@ -15,8 +15,8 @@ def get_current_user_access_token(
         token = get_token_from_cookies(request=request, token_type="access_token")
         return AccessTokenData(**token)
     except Exception as e:
-        log_info(data=f"{str(e)} \n", where_to_load="../logging_and_exc/exceptions_log.txt")
-
+        #log_info(data=f"{str(e)} \n", where_to_load="../logging_and_exc/exceptions_log.txt")
+        pass
 
 
 def get_user_with_role(required_role: list[str]):

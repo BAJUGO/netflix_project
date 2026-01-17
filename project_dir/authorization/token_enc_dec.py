@@ -45,7 +45,8 @@ def get_token_from_cookies(request: Request, token_type: str):
             raise HTTPException(status_code=401, detail='not authenticated')
         return decoded_token
     except Exception as e:
-        log_info(data=f"{str(e)} \n\n", where_to_load="../logging_and_exc/exceptions_log.txt")
+        # log_info(data=f"{str(e)} \n\n", where_to_load="../logging_and_exc/exceptions_log.txt")
+        pass
 
 
 def set_new_tokens(data: dict, response: Response):

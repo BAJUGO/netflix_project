@@ -15,9 +15,9 @@ def log_info(data, where_to_load: str):
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    log_info(
-        data="\n$$$$$  application has been started\n", where_to_load="log_file.txt"
-    )
+    # log_info(
+    #     data="\n$$$$$  application has been started\n", where_to_load="log_file.txt"
+    # )
     redis_client = Redis(
         host=settings.redis.host,
         port=settings.redis.port,
@@ -31,9 +31,9 @@ async def lifespan(app: FastAPI):
     try:
         yield
     finally:
-        log_info(
-            data="\n$$$$$  application has been stopped\n", where_to_load="log_file.txt"
-        )
+        # log_info(
+        #     data="\n$$$$$  application has been stopped\n", where_to_load="log_file.txt"
+        # )
         await redis_client.aclose()
 
 

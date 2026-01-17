@@ -19,10 +19,10 @@ body: {body}
     response = await call_next(request)
 
     response.headers["header_set"] = "in_middleware"
-    if response.background:
-        response.background.tasks.append(log_info, data_to_write, "log_file.txt")
-    else:
-        bgt = BackgroundTasks()
-        bgt.add_task(log_info, data_to_write, "log_file.txt")
-        response.background = bgt
+    # if response.background:
+    #     response.background.tasks.append(log_info, data_to_write, "log_file.txt")
+    # else:
+    #     bgt = BackgroundTasks()
+    #     bgt.add_task(log_info, data_to_write, "log_file.txt")
+    #     response.background = bgt
     return response
