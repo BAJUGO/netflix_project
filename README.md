@@ -3,7 +3,7 @@
 This project is a FastAPI-based web application providing authentication and database management for a media-related database (users, authors, movies, series). It features JWT-based authentication, Redis caching, and PostgreSQL integration via SQLAlchemy.
 
 ## Overview
-The application provides RESTful APIs for:
+The application provides RESTful APIs and a frontend interface for:
 - User registration and authentication (JWT).
 - Managing authors, movies, and series.
 - Role-based access control (Admin, Moderator, User).
@@ -19,12 +19,14 @@ The application provides RESTful APIs for:
 - **Caching**: Redis
 - **Authentication**: JWT (RS256)
 - **Package Manager**: Poetry
+- **Frontend**: HTML/JS/TS (served statically or via frontend server)
 
 ## Requirements
 - Python 3.13 or higher
 - PostgreSQL
 - Redis server
 - OpenSSL (to generate RSA keys for JWT)
+- Node.js (for frontend dependencies in `html/` directory)
 
 ## Setup
 
@@ -34,15 +36,23 @@ The application provides RESTful APIs for:
     cd project_db_auth
     ```
 
-2.  **Install dependencies**:
+2.  **Install backend dependencies**:
     ```bash
     poetry install
     ```
 
-3.  **Environment Variables**:
+3.  **Install frontend dependencies**:
+    ```bash
+    cd html
+    npm install
+    cd ..
+    ```
+
+4.  **Environment Variables**:
     Create a `.env` file in the root directory based on the following template:
     ```env
     DB_URL=postgresql+asyncpg://<user>:<password>@<host>:<port>/<dbname>
+    ECHO=True
     JWT__PRIVATE_KEY=./certs/private.pem
     JWT__PUBLIC_KEY=./certs/public.pem
     JWT__ALGORITHM=RS256
@@ -53,7 +63,7 @@ The application provides RESTful APIs for:
     REDIS__USERNAME=<your_redis_username>
     ```
 
-4.  **JWT Certificates**:
+5.  **JWT Certificates**:
     Generate RSA keys for JWT authentication:
     ```bash
     mkdir certs
@@ -61,7 +71,7 @@ The application provides RESTful APIs for:
     openssl rsa -pubout -in certs/private.pem -out certs/public.pem
     ```
 
-5.  **Database Migrations**:
+6.  **Database Migrations**:
     Apply migrations to the database:
     ```bash
     poetry run alembic upgrade head
@@ -86,6 +96,10 @@ Accessing the root `/` will redirect you to the interactive API documentation (`
 .
 ├── alembic/                # Database migration scripts
 ├── certs/                  # JWT RSA keys (not in version control)
+├── html/                   # Frontend assets (HTML, JS, TS)
+│   ├── html_pages/         # HTML templates for various views
+│   ├── html_scripts/       # JavaScript/TypeScript logic
+│   └── package.json        # Frontend dependencies
 ├── project_dir/
 │   ├── authorization/      # JWT auth logic and dependencies
 │   ├── core/               # Configuration and DB helper
@@ -96,10 +110,12 @@ Accessing the root `/` will redirect you to the interactive API documentation (`
 ├── main.py                 # Application entry point
 ├── pyproject.toml          # Poetry dependencies and config
 └── alembic.ini             # Alembic configuration
+└── TODO's                  # Project tasks and notes
 ```
 
 ## Environment Variables Details
 - `DB_URL`: PostgreSQL connection string (must use `asyncpg`).
+- `ECHO`: Boolean flag for SQLAlchemy SQL echo.
 - `JWT__PRIVATE_KEY`: Path to the RSA private key file.
 - `JWT__PUBLIC_KEY`: Path to the RSA public key file.
 - `JWT__ALGORITHM`: JWT signing algorithm (e.g., `RS256`).
@@ -110,7 +126,7 @@ Accessing the root `/` will redirect you to the interactive API documentation (`
 - `REDIS__USERNAME`: Redis username.
 
 ## Tests
-TODO: Add information about how to run tests when they are implemented.
+TODO: Implement backend and frontend tests. Currently, no tests are available.
 
 ## License
 TODO: Add license information.

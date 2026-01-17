@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Response, Depends, Request
 from project_dir import authorization as auth
-
+from project_dir.logging_and_exc import log_info
 
 router = APIRouter()
 
@@ -16,7 +16,7 @@ async def check_the_data(request: Request, response: Response, token=Depends(aut
             response.status_code = 200
             return response
         except Exception as e:
-            print(e)
+            log_info(data=f"{str(e)} \n", where_to_load="../logging_and_exc/exceptions_log.txt")
             response.status_code = 401
             return response
 
@@ -29,7 +29,7 @@ async def delete_cookies(request: Request, response: Response):
             response.delete_cookie(key="access_token", path="/")
             response.delete_cookie(key="refresh_token", path="/")
         except Exception as e:
-            print(e)
+            log_info(data=f"{str(e)} \n", where_to_load="../logging_and_exc/exceptions_log.txt")
         response.status_code, response.content = 200, "ok"
         return response
     response.status_code = 401

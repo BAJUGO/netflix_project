@@ -6,6 +6,7 @@ import jwt
 from fastapi import Request, Response, HTTPException
 
 from project_dir.core import settings
+from project_dir.logging_and_exc import log_info
 
 
 def encode(data: dict, exp: timedelta, token_type: str):
@@ -44,7 +45,7 @@ def get_token_from_cookies(request: Request, token_type: str):
             raise HTTPException(status_code=401, detail='not authenticated')
         return decoded_token
     except Exception as e:
-        print(e)
+        log_info(data=f"{str(e)} \n\n", where_to_load="../logging_and_exc/exceptions_log.txt")
 
 
 def set_new_tokens(data: dict, response: Response):

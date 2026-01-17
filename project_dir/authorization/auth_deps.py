@@ -3,6 +3,7 @@ from fastapi.security import OAuth2PasswordBearer
 
 from project_dir.authorization.token_schemas import AccessTokenData
 from project_dir.authorization.token_enc_dec import get_token_from_cookies
+from project_dir.logging_and_exc import log_info
 
 oauth2_schema = OAuth2PasswordBearer(tokenUrl="create_token")
 
@@ -14,7 +15,7 @@ def get_current_user_access_token(
         token = get_token_from_cookies(request=request, token_type="access_token")
         return AccessTokenData(**token)
     except Exception as e:
-        print(e)
+        log_info(data=f"{str(e)} \n", where_to_load="../logging_and_exc/exceptions_log.txt")
 
 
 
