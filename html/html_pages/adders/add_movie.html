@@ -2,11 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
     <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
             rel="stylesheet"
     >
+    <title>Title</title>
 </head>
 <body>
 <button id="unlogin">Unlogin</button>
@@ -14,47 +14,38 @@
 <div class="container mt-5">
     <div class="row g-3 my-1">
         <h4 class="col-2 text-center"><strong>Title</strong></h4>
-        <input class="col-2" id="new_series_title">
+        <input class="col-2" id="new_movie_title">
     </div>
     <div class="row g-3 my-1">
         <h4 class="col-2 text-center">Year of Issue</h4>
-        <input type="number" class="col-2" id="new_series_year_of_issue">
-    </div>
-    <div class="row g-3 my-1">
-        <h4 class="col-2 text-center">Episodes</h4>
-        <input type="number" class="col-2" id="new_series_episodes">
-    </div>
-    <div class="row g-3 my-1">
-        <h4 class="col-2 text-center">Seasons</h4>
-        <input type="number" class="col-2" id="new_series_seasons">
+        <input type="number" class="col-2" id="new_movie_year_of_issue">
     </div>
     <div class="row g-3 my-1">
         <h4 class="col-2 text-center">Genre</h4>
-        <input class="col-2" id="new_series_genre">
+        <input class="col-2" id="new_movie_genre">
     </div>
     <div class="row g-3 my-1">
         <h4 class="col-2 text-center">Author ID</h4>
-        <input type="number" class="col-2" id="new_series_author_id">
+        <input type="number" class="col-2" id="new_movie_author_id">
     </div>
     <div class="row g-3 my-1">
         <h4 class="col-2 text-center">Description</h4>
-        <input class="col-10" id="new_series_description">
+        <input class="col-10" id="new_movie_description">
     </div>
     <div class="row g-3 my-1">
         <div class="col-2 text-end">
 
         </div>
-        <button id="add_series_button" class="col-2">Add series</button>
+        <button id="add_movie_button" class="col-2">Add movie</button>
     </div>
 </div>
 
-<script type="module" src="../html_scripts/adders/add_series.js">
+<script type="module" src="../../html_scripts/adders/add_movie.js">
 </script>
 <script type="module">
-    import {includeUnlogin} from "../html_scripts/funcs.js";
+    import {includeUnlogin} from "../../html_scripts/funcs.js";
     includeUnlogin()
 </script>
-
 
 </body>
 </html>
