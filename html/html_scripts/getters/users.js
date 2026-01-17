@@ -1,4 +1,4 @@
-import {json_fetch} from "../funcs.js";
+import {initPage, json_fetch} from "../funcs.js";
 
 
 document.getElementById("get_all_users_button").addEventListener('click', event=> {
@@ -6,7 +6,7 @@ document.getElementById("get_all_users_button").addEventListener('click', event=
     let ul = document.getElementById("ul_for_users")
 
     ul.innerHTML = ''
-
+    void initPage()
     json_fetch("http://localhost:8000/users/get_users", {credentials: "include"}).then(response => {
         for (let user in response) {
             let new_li = document.createElement("li")

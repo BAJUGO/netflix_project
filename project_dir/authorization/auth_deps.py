@@ -1,28 +1,28 @@
 from fastapi import Depends, HTTPException, Request
 from fastapi.security import OAuth2PasswordBearer
 
-from project_dir.authorization.token_enc_dec import decode_access_token
 from project_dir.authorization.token_schemas import AccessTokenData
+from project_dir.authorization.token_enc_dec import get_token_from_cookies
 
 oauth2_schema = OAuth2PasswordBearer(tokenUrl="create_token")
 
 
 def get_current_user_access_token(
-    request: Request
+        request: Request
 ) -> AccessTokenData | None:
-    token = request.cookies.get("access_token")
     try:
-        decode_access_token(token)
-        return AccessTokenData(**decode_access_token(token))
+        token = get_token_from_cookies(request=request, token_type="access_token")
+        if not token:
+            raise HTTPException(status_code=401, detail="not authenticated")
+        return AccessTokenData(**token)
     except Exception as e:
         print(e)
-    raise HTTPException(status_code=401, detail="not authenticated")
-
+        raise HTTPException(status_code=401, detail="not authenticated")
 
 
 def get_user_with_role(required_role: list[str]):
     def subfunction_required_role(
-        user_token: AccessTokenData = Depends(get_current_user_access_token),
+            user_token: AccessTokenData = Depends(get_current_user_access_token),
     ) -> AccessTokenData:
         if user_token.role not in required_role:
             raise HTTPException(status_code=403, detail="Not enough rights")

@@ -1,5 +1,5 @@
 import {mapping} from "./getters/funcs_getters.js";
-import {json_fetch} from "./funcs.js";
+import {initPage, json_fetch} from "./funcs.js";
 
 let movie_id_el = document.getElementById('movie_id')
 let series_id_el = document.getElementById('series_id')
@@ -26,6 +26,7 @@ document.getElementById("form_for_deleting_author").addEventListener('submit', e
 
 
 async function delete_obj(obj_type, obj_id) {
+    void initPage()
     json_fetch(`http://localhost:8000/${mapping[obj_type]}/${obj_id}`, {method: "DELETE", credentials: "include"}).then(response => {
         console.log(response)
     })
