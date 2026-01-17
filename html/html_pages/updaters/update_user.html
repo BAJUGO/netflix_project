@@ -28,6 +28,21 @@
     </div>
 </div>
 
+<div class="container py-5">
+    <div class="row g-3">
+        <div class="col-md-4">
+            <div class="card-custom p-3 h-100">
+                <form id="form_for_deleting_user" class="d-flex gap-2 align-items-center">
+                    <input id="user_id" type="number" class="form-control" placeholder="user ID">
+                    <button class="btn btn-danger" id="delete_user_by_id_button">Delete user account</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
 <script type="module">
     import {json_fetch} from "../../html_scripts/funcs.js";
     document.getElementById("update user").addEventListener('click', event => {
@@ -42,6 +57,14 @@
         user_id_el.value = ''
         new_role_el.value = ''
     })
+    document.getElementById("form_for_deleting_user").addEventListener('submit', event => {
+        event.preventDefault()
+        let user_id_el = document.getElementById("user_id")
+        json_fetch(`http://localhost:8000/delete_account/${user_id_el.value}`, {method: "DELETE",credentials: "include"}).then(response => {
+            console.log(response)
+        })
+    })
+
     import {includeUnlogin} from "../../html_scripts/funcs.js";
     includeUnlogin()
 

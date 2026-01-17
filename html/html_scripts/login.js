@@ -3,7 +3,7 @@ import {json_fetch} from "./funcs.js";
 async function isLogined() {
     fetch("http://localhost:8000/initPage", {credentials: "include"}).then(resp => {
         if (resp.ok) {
-            window.location.href = "../html_pages/main_page.html"
+            window.location.href = "../html_pages/main_pages/main_page.html"
         }})
 }
 //* ДВОЙНОЙ ЗАПРОС ОТПРАВЛЯЕТСЯ ИМЕННО ИЗ-ЗА ЭТОЙ ФУНКЦИИ! ЕСЛИ НУЖНО УБРАТЬ - УБЕРИ ЕЁ
@@ -60,7 +60,7 @@ async function loginUser(event) {
     fetch("http://localhost:8000/create_token", {method: "POST", body: form, credentials: "include"}).then(response => {
     console.log(response)
     if (response.ok) {
-        window.location.href = '../html_pages/main_page.html'
+        window.location.href = '../html_pages/main_pages/main_page.html'
     }
     else {
         console.log("Неудачная попытка авторизации! Попробуйте ещё раз")

@@ -44,7 +44,7 @@ export function create_content_on_page(value, id_of_ul) {
 export async function initPage() {
     let response = await fetch("http://localhost:8000/initPage", {credentials: "include"})
     if (!response.ok) {
-        window.location.href = "../html_pages/login_page.html"
+        window.location.href = "../login_page.html"
     }
 }
 
@@ -66,7 +66,7 @@ export async function unloginUser(event) {
     event.preventDefault()
     fetch("http://localhost:8000/deleteCookies", {credentials: "include"}).then(response => {
         if (response.ok) {
-            window.location.href = "../html_pages/login_page.html"
+            window.location.href = "../login_page.html"
         }
     })
 }

@@ -41,8 +41,8 @@ async def get_admin_token_info(user_token: auth.AccessTokenData = auth.admin_dep
 # ====================
 
 @router.post("/register", tags=["user", "add"])
-async def create_user(user_in: schemas.UserCreate, session: AsyncSession = ses_dep):
-    return await global_crud.add_user_session(user_in=user_in, session=session)
+async def create_user(user_in_body: json_body, session: AsyncSession = ses_dep):
+    return await global_crud.add_user_session(user_in_body=user_in_body, session=session)
 
 
 @router.get("/users/get_users", response_model=list, tags=["user", "get"], dependencies=[auth.admin_dep])
