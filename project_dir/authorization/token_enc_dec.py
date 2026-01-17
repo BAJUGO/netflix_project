@@ -3,7 +3,7 @@ from datetime import timedelta, datetime, UTC
 
 import jwt
 
-from fastapi import Request, Response
+from fastapi import Request, Response, HTTPException
 
 from project_dir.core import settings
 
@@ -37,11 +37,14 @@ def decode_token(token: str):
     )
 
 def get_token_from_cookies(request: Request, token_type: str):
-    token = request.cookies.get(token_type)
-    decoded_token = decode_token(token)
-    if decoded_token["exp"] < time.time():
-        return None
-    return decoded_token
+    try:
+        token = request.cookies.get(token_type)
+        decoded_token = decode_token(token)
+        if decoded_token["exp"] < time.time():
+            raise HTTPException(status_code=401, detail='not authenticated')
+        return decoded_token
+    except Exception as e:
+        print(e)
 
 
 def set_new_tokens(data: dict, response: Response):

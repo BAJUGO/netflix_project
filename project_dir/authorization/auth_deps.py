@@ -12,12 +12,10 @@ def get_current_user_access_token(
 ) -> AccessTokenData | None:
     try:
         token = get_token_from_cookies(request=request, token_type="access_token")
-        if not token:
-            raise HTTPException(status_code=401, detail="not authenticated")
         return AccessTokenData(**token)
     except Exception as e:
         print(e)
-        raise HTTPException(status_code=401, detail="not authenticated")
+
 
 
 def get_user_with_role(required_role: list[str]):
