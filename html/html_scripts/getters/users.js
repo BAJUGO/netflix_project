@@ -1,4 +1,4 @@
-import {json_fetch} from "./funcs.js";
+import {json_fetch} from "../funcs.js";
 
 
 document.getElementById("get_all_users_button").addEventListener('click', event=> {

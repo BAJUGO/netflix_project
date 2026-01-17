@@ -1,4 +1,4 @@
-import {create_content_on_page, initClearButtons} from "./funcs.js";
+import {create_content_on_page, initClearButtons} from "../funcs.js";
 import {get_all_objects, get_object_by_id} from "./funcs_getters.js";
 
 

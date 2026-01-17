@@ -1,4 +1,4 @@
-import {create_content_on_page, json_fetch} from "./funcs.js";
+import {create_content_on_page, json_fetch} from "../funcs.js";
 
 export const mapping = {
     movie: "movies",

@@ -1,4 +1,4 @@
-import {mapping} from "./funcs_getters.js";
+import {mapping} from "./getters/funcs_getters.js";
 import {json_fetch} from "./funcs.js";
 
 let movie_id_el = document.getElementById('movie_id')

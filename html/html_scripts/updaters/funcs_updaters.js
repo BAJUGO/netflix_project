@@ -1,4 +1,4 @@
-import {mapping} from "../funcs_getters.js";
+import {mapping} from "../getters/funcs_getters.js";
 import {json_fetch} from "../funcs.js";
 
 export async function update_object(event, object_type, list_of_attrs) {
