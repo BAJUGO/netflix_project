@@ -1,5 +1,5 @@
-import {mapping} from "./funcs_getters.js";
-import {json_fetch} from "./funcs.js";
+import {mapping} from "../funcs_getters.js";
+import {json_fetch} from "../funcs.js";
 
 
 export async function add_object(event, object_type, list_of_attrs) {
