@@ -5,8 +5,8 @@ from typing import Callable
 from redis.asyncio import Redis
 from sqlalchemy.ext.asyncio import AsyncSession
 
-import project_dir.views_part.global_crud.crud as default_crud
-import project_dir.views_part.global_crud.relationship_crud as rel_crud
+import backend.views_part.global_crud.crud as default_crud
+import backend.views_part.global_crud.relationship_crud as rel_crud
 
 
 def cache_response_wrapper(ttl: int, namespace: str, key_builder: Callable[[dict], str] | None = None):

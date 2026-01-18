@@ -5,8 +5,8 @@ from pydantic import EmailStr
 from sqlalchemy import Select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from project_dir.core import db_helper
-from project_dir.models import User
+from backend.core import db_helper
+from backend.models import User
 
 
 def hash_password(plain_pw: str):

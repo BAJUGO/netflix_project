@@ -3,12 +3,12 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, Request
 from redis.asyncio import Redis
 
-from project_dir.core import settings
+from backend.core import settings
 
 
 def log_info(data, where_to_load: str):
     with open(
-        f"D:/project_db_auth/project_dir/logging_and_exc/{where_to_load}", "a"
+            f"/backend/logging_and_exc/{where_to_load}", "a"
     ) as file:
         file.write(data)
 

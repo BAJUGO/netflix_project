@@ -5,8 +5,8 @@ import jwt
 
 from fastapi import Request, Response, HTTPException
 
-from project_dir.core import settings
-from project_dir.logging_and_exc import log_info
+from backend.core import settings
+from backend.logging_and_exc import log_info
 
 
 def encode(data: dict, exp: timedelta, token_type: str):

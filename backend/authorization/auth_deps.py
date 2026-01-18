@@ -1,9 +1,9 @@
 from fastapi import Depends, HTTPException, Request
 from fastapi.security import OAuth2PasswordBearer
 
-from project_dir.authorization.token_schemas import AccessTokenData
-from project_dir.authorization.token_enc_dec import get_token_from_cookies
-from project_dir.logging_and_exc import log_info
+from backend.authorization.token_schemas import AccessTokenData
+from backend.authorization.token_enc_dec import get_token_from_cookies
+from backend.logging_and_exc import log_info
 
 oauth2_schema = OAuth2PasswordBearer(tokenUrl="create_token")
 

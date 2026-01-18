@@ -1,6 +1,6 @@
 from sqlalchemy.orm import mapped_column, Mapped
 
-from project_dir.core import Base
+from backend.core import Base
 
 
 class User(Base):

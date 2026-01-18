@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Mapped, mapped_column
 
 from .mixins import AuthorRelationMixin
-from project_dir.core import Base
+from backend.core import Base
 
 
 

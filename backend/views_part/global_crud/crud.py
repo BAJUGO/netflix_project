@@ -6,11 +6,11 @@ from pydantic import BaseModel
 from sqlalchemy import Select, update
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from project_dir.authorization import hash_password
-from project_dir.models import Author, Movie, Series, User
-import project_dir.views_part.schemas as schemas
+from backend.authorization import hash_password
+from backend.models import Author, Movie, Series, User
+import backend.views_part.schemas as schemas
 
-from project_dir.routers.delete_put_patch_router import json_body
+from backend.routers.delete_put_patch_router import json_body
 
 T = TypeVar("T", Movie, Series, Author, User)
 P = TypeVar("P", bound=BaseModel)

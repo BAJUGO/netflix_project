@@ -1,13 +1,13 @@
 .venv
 .idea
-/project_dir/logging_and_exc/exceptions_log.txt
-/project_dir/logging_and_exc/log_file.txt
+/backend/logging_and_exc/exceptions_log.txt
+/backend/logging_and_exc/log_file.txt
 /lof_file.txt
 /.env
-/project_dir/certs/
+/backend/certs/
 /certs/
 
 /TODO's
 
 
-
+__pycache__/

@@ -1,13 +1,13 @@
 from fastapi import APIRouter, Depends, Response
 from sqlalchemy.ext.asyncio import AsyncSession
 
-import project_dir.authorization as auth
-import project_dir.views_part.global_crud as global_crud
-import project_dir.views_part.global_crud.cached_crud as cached_crud
-import project_dir.views_part.schemas as schemas
-from project_dir.core import ses_dep
-from project_dir.logging_and_exc.pre_post_up import get_redis
-from project_dir.routers.delete_put_patch_router import json_body
+import backend.authorization as auth
+import backend.views_part.global_crud as global_crud
+import backend.views_part.global_crud.cached_crud as cached_crud
+import backend.views_part.schemas as schemas
+from backend.core import ses_dep
+from backend.logging_and_exc.pre_post_up import get_redis
+from backend.routers.delete_put_patch_router import json_body
 
 router = APIRouter(dependencies=[])
 

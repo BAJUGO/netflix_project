@@ -3,8 +3,8 @@ from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 
 
-from project_dir.logging_and_exc import lifespan, do_middleware, custom_exception_handler
-from project_dir.routers import *
+from backend.logging_and_exc import lifespan, do_middleware, custom_exception_handler
+from backend.routers import *
 
 app = FastAPI(lifespan=lifespan)
 app.middleware("http")(do_middleware)

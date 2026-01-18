@@ -3,11 +3,11 @@ from typing import Annotated
 from fastapi import Form, APIRouter, Body
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from project_dir.authorization import admin_or_mod_dep, admin_dep
-from project_dir.core import ses_dep
+from backend.authorization import admin_or_mod_dep, admin_dep
+from backend.core import ses_dep
 
-import project_dir.views_part.global_crud as global_crud
-import project_dir.views_part.schemas as schemas
+import backend.views_part.global_crud as global_crud
+import backend.views_part.schemas as schemas
 
 json_body = Annotated[str, Body()]
 

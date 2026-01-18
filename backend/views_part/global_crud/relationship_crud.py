@@ -6,9 +6,9 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import selectinload, InstrumentedAttribute
 
-import project_dir.views_part.schemas as schemas
-from project_dir.models import Author, Movie, Series
-from project_dir.views_part.global_crud.crud import model_to_schema, models_to_schemas
+import backend.views_part.schemas as schemas
+from backend.models import Author, Movie, Series
+from backend.views_part.global_crud.crud import model_to_schema, models_to_schemas
 
 T = TypeVar("T", Movie, Series)
 

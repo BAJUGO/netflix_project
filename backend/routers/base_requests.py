@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Response, Depends, Request
-from project_dir import authorization as auth
-from project_dir.logging_and_exc import log_info
+from backend import authorization as auth
+from backend.logging_and_exc import log_info
 
 router = APIRouter()
 
